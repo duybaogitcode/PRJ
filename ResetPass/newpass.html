@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Password</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="header" style="color: blanchedalmond;">
+        <h1>Group 3</h1>
+    </div>
+    
+    <div class="main">
+        <div class="container">
+            <div class="text">
+                <h1>New Password</h1>
+            </div>
+            <div class="your-input">
+                <div class="input">
+                    <input type="password" name="new-pass" id="new-pass" required />
+                    <label for="new-pass">Enter new password </label>
+                </div>
+            </div>
+            <div class="your-input">
+                <div class="input">
+                    <input type="password" name="new-pass" id="new-pass" required />
+                    <label for="new-pass">Confirm your new password</label>
+                </div>
+                
+            </div>
+            <div>
+                <input type="checkbox" onclick="myFunction()">Show Password
+            </div>
+            
+            <button class="button">Continue</button>
+        </div>
+        </div>
+        
+        <script>
+            function myFunction() {
+              var x = document.getElementById("new-pass");
+              if (x.type === "password") {
+                x.type = "text";
+              } else {
+                x.type = "password";
+              }
+            }
+            </script>
+               
+
+</body>
+
+</html>

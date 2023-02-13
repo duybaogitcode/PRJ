@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: rgb(63, 114, 236);
+}
+.logo{
+    width: 120px;
+    height: 50px;
+    margin: 15px;
+}
+.main{
+
+    display: flex;
+    width: auto;
+    flex-direction: column;
+    align-items: center;
+    
+   
+}
+.container {
+    width: 400px;
+    height: 320px;
+    background: #fff;
+    box-shadow: 0 10px 15px rgba(19, 82, 231, 0.7);
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 15px 20px 15px 20px;
+    margin-top: 10% ;
+    margin-bottom:5% ;
+    
+}
+.text{
+    justify-content: center; 
+}
+.text h1,p{
+   margin: 0px 0px 5px 0px ;
+}
+.input {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-bottom: 0.7em;
+}
+.your-input input{
+    width: 100%;
+    height: 50px;
+    padding-top: 1.1rem;
+    padding-left: 9px;
+    outline: none;
+    border: 1px solid #8c8c8c;
+    border-radius: 3px;
+    transition: .2s;
+}
+.your-input label {
+    position: absolute;
+    top: 30%;
+    left: 10px;
+    font-size: 1.1rem;
+    color: #8c8c8c;
+    transition: .2s;
+}
+.input input:focus ~ label,
+.input input:valid ~ label{
+    top: 10%;
+    font-size: .8rem;
+    color: #000;
+}
+  
+.input input:focus {
+    border-width: 2px;
+    border-color: #0A66C3;
+}
+  
+.button {
+    height: 50px;
+    background: #0A66C3;
+    outline: none;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bolder;
+
+}
+.button:hover {
+    background: #01035e;
+}
+  
+
+
