@@ -85,10 +85,10 @@
                             <a class="nav-link" href="#trending"><ion-icon name="trending-up"></ion-icon> Trending</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><ion-icon name="cash"></ion-icon></ion-icon> Sale</a>
+                            <a class="nav-link" href="#sale"><ion-icon name="cash"></ion-icon></ion-icon> Sale</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><ion-icon name="person"></ion-icon> About Us</a>
+                            <a class="nav-link" href="#about"><ion-icon name="person"></ion-icon> About Us</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#"><ion-icon name="call"></ion-icon> Contact</a>
@@ -99,7 +99,7 @@
 
 
 
-            <div class= "row main-content">
+            <div class= "row main-content ">
                 <jsp:include page = "/WEB-INF/view/${controller}/${action}.jsp" />
             </div>
             <div class="row footer">

@@ -128,7 +128,22 @@ and open the template in the editor.
 
 }
 
+.content3 .content3-bg-img{
+    margin-top: 50px;
+    height: 80vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50%;
+    border-radius: 5px;
+}
 
+.content3 .content3-bg-img .para-content3{
+    padding-top: 30px;
+}
+
+.content3 .content3-bg-img .buy{
+    margin-top: 33%;
+}
 
 .footer {
     background-color: gray;
