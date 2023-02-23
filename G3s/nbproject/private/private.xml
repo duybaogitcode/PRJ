@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/MyWork/JavaWeb/G3s/src/java/dal/productFacade.java</file>
+            <file>file:/D:/MyWork/JavaWeb/G3s/web/WEB-INF/view/product/product.jsp</file>
+            <file>file:/D:/MyWork/JavaWeb/G3s/src/java/model/product.java</file>
             <file>file:/D:/MyWork/JavaWeb/G3s/web/WEB-INF/view/home/index.jsp</file>
-            <file>file:/D:/MyWork/JavaWeb/G3s/web/css/site.css</file>
             <file>file:/D:/MyWork/JavaWeb/G3s/web/WEB-INF/layouts/main.jsp</file>
         </group>
     </open-files>

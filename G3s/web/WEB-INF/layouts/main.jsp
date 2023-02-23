@@ -79,16 +79,16 @@
                             <a class="nav-link" href="<c:url value ="/home/index.do" />"><ion-icon name="home"></ion-icon> Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><ion-icon name="watch"></ion-icon> Category</a>
+                            <a class="nav-link" href="<c:url value ="/product/product.do" />"><ion-icon name="watch"></ion-icon> Category</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#trending"><ion-icon name="trending-up"></ion-icon> Trending</a>
+                            <a class="nav-link" href="/g3s/#trending"><ion-icon name="trending-up"></ion-icon> Trending</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#sale"><ion-icon name="cash"></ion-icon></ion-icon> Sale</a>
+                            <a class="nav-link" href="/g3s/#sale"><ion-icon name="cash"></ion-icon></ion-icon> Sale</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#about"><ion-icon name="person"></ion-icon> About Us</a>
+                            <a class="nav-link" href="/g3s/#about"><ion-icon name="person"></ion-icon> About Us</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#"><ion-icon name="call"></ion-icon> Contact</a>

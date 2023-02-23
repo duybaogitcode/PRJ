@@ -21,8 +21,8 @@ import model.product;
  *
  * @author duyba
  */
-@WebServlet(name = "UserController", urlPatterns = {"/user"})
-public class UserController extends HttpServlet {
+@WebServlet(name = "ProductController", urlPatterns = {"/product"})
+public class ProductController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,29 +35,9 @@ public class UserController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String controller = (String) request.getAttribute("controller");
-        String action = (String) request.getAttribute("action");
-        switch (action) {
-            case "signin":
-                //Processing code here
-                //Foward request & respone to view
-                test(request, response);
-                System.out.println("test ne bao");
-                break;
-            default:
-                //Show error page
-                request.setAttribute("Message", "Invalid");
-                //set view name
-                request.setAttribute("action", "error");
-                request.setAttribute("controller", "error");
-                //Foward request to layout, de trong web info thi client ko truy cap dc
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
-        }
-    }
+//        String controller = (String) request.getAttribute("controller");
+//        String action = (String) request.getAttribute("action");
 
-    protected void test(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
         try {
             productFacade pf = new productFacade();
             List<product> list = pf.select();
@@ -72,6 +52,7 @@ public class UserController extends HttpServlet {
             request.setAttribute("action", "error");
             request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
