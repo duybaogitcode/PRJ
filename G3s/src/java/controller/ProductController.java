@@ -35,14 +35,24 @@ public class ProductController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        String controller = (String) request.getAttribute("controller");
-//        String action = (String) request.getAttribute("action");
-
+        String controller = (String) request.getAttribute("controller");
+        String action = (String) request.getAttribute("action");
+        String indexPage = request.getParameter("index");
+        if(indexPage == null){
+            indexPage = "1";
+        }
+        int index = Integer.parseInt(indexPage);
+        System.out.println(index);
         try {
             productFacade pf = new productFacade();
             List<product> list = pf.select();
-            request.setAttribute("list", list);
-            System.out.println(list);
+            int endPage = list.size()/6;
+            if(list.size() % 6 != 0){
+                endPage++;
+            }
+            List<product> listPaging = pf.pagingProduct(index);
+            request.setAttribute("listPaging", listPaging);
+            request.setAttribute("endPage", endPage);
             //Forward request & response to the main layout
             request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         } catch (SQLException ex) {

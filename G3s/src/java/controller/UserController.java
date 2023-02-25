@@ -42,8 +42,13 @@ public class UserController extends HttpServlet {
             case "signin":
                 //Processing code here
                 //Foward request & respone to view
-                test(request, response);
                 System.out.println("test ne bao");
+                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+                break;
+            case "joinnow":
+                //Processing code here
+                //Foward request & respone to view
+                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             default:
                 //Show error page
@@ -53,24 +58,6 @@ public class UserController extends HttpServlet {
                 request.setAttribute("controller", "error");
                 //Foward request to layout, de trong web info thi client ko truy cap dc
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
-        }
-    }
-
-    protected void test(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            productFacade pf = new productFacade();
-            List<product> list = pf.select();
-            request.setAttribute("list", list);
-            System.out.println(list);
-            //Forward request & response to the main layout
-            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            //Show the error page
-            request.setAttribute("message", ex.getMessage());
-            request.setAttribute("controller", "error");
-            request.setAttribute("action", "error");
-            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         }
     }
 

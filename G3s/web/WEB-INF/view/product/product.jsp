@@ -9,21 +9,30 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="show-product">
-    <c:forEach var="product" items="${list}" varStatus="loop">
-        <c:if test="${loop.index % 3 == 0}">
-            <div class="row">
+    
+    <table>
+        <c:forEach var="product" items="${listPaging}" varStatus="loop">
+            <c:if test="${loop.index % 3 == 0}">
+                <tr>
+                </c:if>
+                <td>
+                    <div class="card">
+                        <p>${loop.index}</p>
+                        <h4>${product.name}</h3>
+                        <img src="<c:url value="/img/${product.image}" />">
+                        <p><fmt:formatNumber value="${product.price}" type = "currency" /></p>
+                    </div>
+                </td>
+                <c:if test="${(loop.index + 1) % 3 == 0 || loop.last}">
+                </tr>
             </c:if>
-            <div class="col-md-4">
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <p>${product.price}</p>
-                <img src="<c:url value="/img/${product.image}" />">
-            </div>
-            <c:if test="${(loop.index + 1) % 3 == 0 || loop.last}">
-            </div>
-        </c:if>
+        </c:forEach>
+    </table>
+    <c:forEach begin = "1" end = "${endPage}" var = "i">
+        <a class="page-index" href="<c:url value ="/product/product.do?index=${i}" />">${i}</a>
     </c:forEach>
 </div>
+
 
 
 

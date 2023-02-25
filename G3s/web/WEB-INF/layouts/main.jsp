@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="en-US" scope="session" />
 <link href="<c:url value="/css/site.css"/>" rel="stylesheet" type="text/css"/>
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,7 @@
                 <div class="header-left">
 
                     <i><ion-icon name="contact"></ion-icon></i>
-                    <a href="#" class="btn-header-left">Join Now</a>
+                    <a href="<c:url value ="/user/joinnow.do" />"class="btn-header-left">Join Now</a>
                     <span>/</span>
                     <a href="<c:url value ="/user/signin.do" />" class="btn-header-left"">Sign in</a> 
 
@@ -78,8 +79,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<c:url value ="/home/index.do" />"><ion-icon name="home"></ion-icon> Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<c:url value ="/product/product.do" />"><ion-icon name="watch"></ion-icon> Category</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <ion-icon name="watch"></ion-icon> Category</a>
+                            <ul class="dropdown-menu nav-item" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="<c:url value ="/product/product.do" />">All</a></li>
+                                <li><a class="dropdown-item" href="#">ss2</a></li>
+                                <li><a class="dropdown-item" href="#">ss3</a></li>
+                                <li><a class="dropdown-item" href="#">ss4</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/g3s/#trending"><ion-icon name="trending-up"></ion-icon> Trending</a>
@@ -99,7 +107,7 @@
 
 
 
-            <div class= "row main-content ">
+            <div class= "row main-content">
                 <jsp:include page = "/WEB-INF/view/${controller}/${action}.jsp" />
             </div>
             <div class="row footer">

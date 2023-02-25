@@ -7,4 +7,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <h2>Hello Bruh (ERROR)</h2>
-${Message}
+${message}
