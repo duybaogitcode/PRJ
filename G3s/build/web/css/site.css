@@ -84,6 +84,19 @@ and open the template in the editor.
     background-color: #0FA9EB;
 }
 
+.nav-item .nav-link:focus{
+    color: white;
+    font-size: large;
+    border-radius: 10px;
+    background-color: #0FA9EB;
+}
+
+
+.navbar-nav .dropdown-menu{
+    background-color:transparent;
+    border: none;
+    text-align: center;
+}
 
 .content{
     width: 100%;
@@ -156,18 +169,57 @@ and open the template in the editor.
 
 
 
-/*product*/
+/*watches*/
 
 .show-product table{
     margin-top: 50px;
+    text-align: center;
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
+    width: 100%;
 }
-.show-product table tr td .card img{
-    height: 200px;
+/*
+.show-product table .show-product-box{
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+    border: .1rem solid rgba(0,0,0,.3);
+}*/
+
+
+
+.show-product table .show-product-box img{
+    margin: 10px 0;
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
 }
 
+
+.show-product table .show-product-box .price{
+    font-size: 20px;
+    padding: 10px 20px;
+    background-color: #0FA9EB;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+.show-product-box{
+    padding: 60px 0;
+}
+
+.show-product-box-btn{
+   padding: 20px 0;
+}
+
+.show-product-box-btn a{
+    text-decoration: none;
+    font-size: 15px;
+    margin: 0 40px;
+    color: black;
+    font-weight: 700;
+}
+
+
+/*----------end watches----------*/
 
 
 /*----------Phan cua NamVipPro----------*/

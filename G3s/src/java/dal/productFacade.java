@@ -56,7 +56,7 @@ public class productFacade {
 
         PreparedStatement stm = con.prepareStatement("select * from product\n order by id\n"
                 + "offset ?  rows fetch next 6 rows only;");
-        stm.setInt(1, (index - 1) * 7);
+        stm.setInt(1, (index - 1) * 6);
         ResultSet rs = stm.executeQuery();
         list = new ArrayList<>();
         while (rs.next()) {

@@ -79,15 +79,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<c:url value ="/home/index.do" />"><ion-icon name="home"></ion-icon> Home</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <ion-icon name="watch"></ion-icon> Category</a>
-                            <ul class="dropdown-menu nav-item" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="<c:url value ="/product/product.do" />">All</a></li>
-                                <li><a class="dropdown-item" href="#">ss2</a></li>
-                                <li><a class="dropdown-item" href="#">ss3</a></li>
-                                <li><a class="dropdown-item" href="#">ss4</a></li>
-                            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<c:url value ="/watch/index.do" />"><ion-icon name="watch"></ion-icon> Watches</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/g3s/#trending"><ion-icon name="trending-up"></ion-icon> Trending</a>
