@@ -31,7 +31,7 @@ public class categoryFacade {
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
             category cate = new category();
-            cate.setId(rs.getInt("id"));
+            cate.setId(rs.getString("id"));
             cate.setName(rs.getString("name"));
             //Them cate vao list
             list.add(cate);

@@ -5,16 +5,20 @@
  */
 package controller;
 
+import dal.categoryFacade;
 import dal.productFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.category;
 import model.product;
 
 /**
@@ -37,14 +41,28 @@ public class WatchesController extends HttpServlet {
             throws ServletException, IOException {
         String controller = (String) request.getAttribute("controller");
         String action = (String) request.getAttribute("action");
-        System.out.println(action);
-       
+        getListCate(request, response);
+        System.out.println("aaaa");
+        switch (action) {
+            case "index":
+                showAll(request, response);
+                break;
+            case "filter":
+                System.out.println("aaa");
+                System.out.println(request.getContextPath());
+                response.sendRedirect(request.getContextPath() + "/watch/index.do");
+                break;
+        }
+
+    }
+
+    protected void showAll(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String indexPage = request.getParameter("index");
         if (indexPage == null) {
             indexPage = "1";
         }
         int index = Integer.parseInt(indexPage);
-        System.out.println(index);
         try {
             productFacade pf = new productFacade();
             List<product> list = pf.select();
@@ -64,7 +82,20 @@ public class WatchesController extends HttpServlet {
             request.setAttribute("action", "error");
             request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         }
+    }
 
+    protected void getListCate(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        categoryFacade cf = new categoryFacade();
+        try {
+            List<category> listCate = cf.select();
+            request.setAttribute("listCate", listCate);
+        } catch (SQLException ex) {
+            request.setAttribute("message", ex.getMessage());
+            request.setAttribute("controller", "error");
+            request.setAttribute("action", "error");
+            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
