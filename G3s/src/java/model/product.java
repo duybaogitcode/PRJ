@@ -19,19 +19,19 @@ public class product {
     private String description;
     private float price;
     private float discount;
-    private String categoryID;
+    private String categoryId;
 
     public product() {
     }
 
-    public product(int id, String name, String image, String description, float price, float discount, String categoryID) {
+    public product(int id, String name, String image, String description, float price, float discount, String categoryId) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
         this.price = price;
         this.discount = discount;
-        this.categoryID = categoryID;
+        this.categoryId = categoryId;
     }
 
     public int getId() {
@@ -82,12 +82,12 @@ public class product {
         this.discount = discount;
     }
 
-    public String getCategoryID() {
-        return categoryID;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategoryID(String categoryID) {
-        this.categoryID = categoryID;
+    public void setCategoryId(String categoryID) {
+        this.categoryId = categoryID;
     }
 
 }

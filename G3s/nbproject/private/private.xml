@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/MyWork/JavaWeb/G3s/web/WEB-INF/view/watch/index.jsp</file>
-            <file>file:/D:/MyWork/JavaWeb/G3s/src/java/controller/WatchesController.java</file>
-            <file>file:/D:/MyWork/JavaWeb/G3s/web/WEB-INF/layouts/main.jsp</file>
+            <file>file:/C:/WorkSpace/PRJ_PROJECT_G3/PRJ/G3s/web/WEB-INF/layouts/main.jsp</file>
+            <file>file:/C:/WorkSpace/PRJ_PROJECT_G3/PRJ/G3s/web/WEB-INF/view/cart/index.jsp</file>
+            <file>file:/C:/WorkSpace/PRJ_PROJECT_G3/PRJ/G3s/web/WEB-INF/view/watch/index.jsp</file>
+            <file>file:/C:/WorkSpace/PRJ_PROJECT_G3/PRJ/G3s/src/java/controller/CartController.java</file>
         </group>
     </open-files>
 </project-private>
