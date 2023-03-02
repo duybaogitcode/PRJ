@@ -64,10 +64,10 @@
                 </div>
 
                 <div class="icons">
-
-                    <i><ion-icon name="search"></ion-icon></i>
-                    <i><ion-icon name="cart"></ion-icon></i>
-
+                    
+                        <i><ion-icon name="search"></ion-icon></i>
+                        <i><ion-icon name="cart"></ion-icon></i>
+                    
                 </div>
 
             </div>

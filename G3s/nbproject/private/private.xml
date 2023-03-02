@@ -3,9 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/MyWork/JavaWeb/G3s/web/WEB-INF/view/watch/index.jsp</file>
-            <file>file:/D:/MyWork/JavaWeb/G3s/src/java/controller/WatchesController.java</file>
-            <file>file:/D:/MyWork/JavaWeb/G3s/web/WEB-INF/layouts/main.jsp</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/src/java/dal/productFacade.java</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/src/java/controller/OrderController.java</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/web/WEB-INF/view/watch/index.jsp</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/src/java/controller/WatchesController.java</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/src/java/model/product.java</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/src/java/dal/orderdetailFacade.java</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/web/WEB-INF/layouts/main.jsp</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/web/WEB-INF/view/order/paybill.jsp</file>
+            <file>file:/C:/Users/giahu/Desktop/Kì%204/PRJ301/Project/PRJ/G3s/src/java/model/orderdetail.java</file>
         </group>
     </open-files>
 </project-private>

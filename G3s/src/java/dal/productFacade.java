@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.category;
-import model.product;
+import model.orderdetail;
+import model.Product;
 
 /**
  *
@@ -23,8 +24,8 @@ import model.product;
  */
 public class productFacade {
 
-    public List<product> select() throws SQLException {
-        List<product> list = null;
+    public List<Product> select() throws SQLException {
+        List<Product> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -34,7 +35,7 @@ public class productFacade {
         list = new ArrayList<>();
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
-            product pr = new product();
+            Product pr = new Product();
             pr.setId(rs.getInt("id"));
             pr.setName(rs.getString("name"));
             pr.setDescription(rs.getNString("description"));
@@ -47,9 +48,67 @@ public class productFacade {
         con.close();
         return list;
     }
+    
+    public void create(orderdetail ord) throws SQLException {
+        Connection con = DBContext.getConnection();
+        PreparedStatement stm = con.prepareStatement("insert orderDetail values(?,?,?,?,?,?)");
+        stm.setInt(1, ord.getId());
+        stm.setInt(2, ord.getOrderHeaderId());
+        stm.setInt(3, ord.getProductId());
+        stm.setInt(4, ord.getQuantity());
+        stm.setFloat(5, ord.getPrice());
+        stm.setFloat(6, ord.getDiscount());
+        int count = stm.executeUpdate();
+        con.close();
+    }
 
-    public List<product> pagingProduct(int index) throws SQLException {
-        List<product> list = null;
+    public Product read(String id) throws SQLException {
+        Product pr = null;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select * from Product where id = ?");
+        //Thực thi lệnh SELECT
+        stm.setString(1, id);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            pr = new Product();
+            pr.setId(rs.getInt("id"));
+            pr.setName(rs.getString("name"));
+            pr.setDescription(rs.getNString("description"));
+            pr.setImage(rs.getString("image"));
+            pr.setPrice(rs.getFloat("price"));
+            pr.setDiscount(rs.getFloat("discount"));
+            pr.setCategoryID(rs.getString("categoryId"));
+        }
+        con.close();
+        return pr;
+    }
+
+    public void update(orderdetail ord) throws SQLException {
+        Connection con = DBContext.getConnection();
+        PreparedStatement stm = con.prepareStatement("update orderDetail set orderHeaderId = ?, productId = ?, quantity = ?, price = ?, discount = ?  where id = ?");
+        stm.setInt(1, ord.getOrderHeaderId());
+        stm.setInt(2, ord.getProductId());
+        stm.setInt(3, ord.getQuantity());
+        stm.setFloat(4, ord.getPrice());
+        stm.setFloat(5, ord.getDiscount());
+        stm.setInt(6, ord.getId());
+        int count = stm.executeUpdate();
+        con.close();
+    }
+
+    public void delete(String id) throws SQLException {
+        Connection con = DBContext.getConnection();
+        // Prepare -> thay đổi dữ liệu
+        PreparedStatement stm = con.prepareStatement("delete from orderHeader where id = ?");
+        stm.setString(1, id);
+        int count = stm.executeUpdate();
+        con.close();
+    }
+
+    public List<Product> pagingProduct(int index) throws SQLException {
+        List<Product> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -61,7 +120,7 @@ public class productFacade {
         list = new ArrayList<>();
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
-            product pr = new product();
+            Product pr = new Product();
             pr.setId(rs.getInt("id"));
             pr.setName(rs.getString("name"));
             pr.setDescription(rs.getNString("description"));

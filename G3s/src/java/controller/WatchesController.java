@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.product;
+import model.Product;
 
 /**
  *
@@ -47,12 +47,12 @@ public class WatchesController extends HttpServlet {
         System.out.println(index);
         try {
             productFacade pf = new productFacade();
-            List<product> list = pf.select();
+            List<Product> list = pf.select();
             int endPage = list.size() / 6;
             if (list.size() % 6 != 0) {
                 endPage++;
             }
-            List<product> listPaging = pf.pagingProduct(index);
+            List<Product> listPaging = pf.pagingProduct(index);
             request.setAttribute("listPaging", listPaging);
             request.setAttribute("endPage", endPage);
             //Forward request & response to the main layout
