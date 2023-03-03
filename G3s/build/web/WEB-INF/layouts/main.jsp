@@ -28,10 +28,17 @@
                 <div class="header-left">
 
                     <i><ion-icon name="contact"></ion-icon></i>
-                    <a href="<c:url value ="/user/joinnow.do" />"class="btn-header-left">Join Now</a>
-                    <span>/</span>
-                    <a href="<c:url value ="/user/signin.do" />" class="btn-header-left"">Sign in</a> 
-
+                    <c:choose>
+                        <c:when test="${account==null}">
+                        <a href="<c:url value ="/user/joinnow.do" />"class="btn-header-left">Join Now</a>
+                        <span>/</span>
+                        <a href="<c:url value ="/user/signin.do" />" class="btn-header-left">Sign in</a> 
+                    </c:when>
+                    <c:otherwise>
+                        ${account.name} |
+                        <a href="<c:url value ="/user/logout.do" />" class="btn-header-left">Log out</a> 
+                    </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <div class="logo">

@@ -112,12 +112,13 @@ public class accountFacade {
         con.close();
     }
 
-    public account login(String email, String password) throws SQLException, NoSuchAlgorithmException {
+    public account signin(String emailOrPhone, String password) throws SQLException, NoSuchAlgorithmException {
         account acc = null;
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("select * from account where email=? and password=? ");
-        stm.setString(1, email);
-        stm.setString(2, password);
+        PreparedStatement stm = con.prepareStatement("select * from account where email = ? or phone = ? and password = ?");
+        stm.setString(1, emailOrPhone);
+        stm.setString(2, emailOrPhone);
+        stm.setString(3, password);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
             acc = new account();
@@ -127,7 +128,6 @@ public class accountFacade {
             acc.setPhone(rs.getString("phone"));
             acc.setEmail(rs.getString("email"));
             acc.setPassword(rs.getString("password"));
-            acc.setEnable(rs.getBoolean("enable"));
             acc.setRole(rs.getString("role"));
         }
         con.close();

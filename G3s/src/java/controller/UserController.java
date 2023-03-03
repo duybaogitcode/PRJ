@@ -45,26 +45,21 @@ public class UserController extends HttpServlet {
         String action = (String) request.getAttribute("action");
         switch (action) {
             case "signin":
-                //Processing code here
                 //Foward request & respone to view
-                accountFacade af = new accountFacade();
-                 {
-                    try {
-                        List<account> list = af.select();
-                        System.out.println(list);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             case "signin_handler":
                 signin_handler(request, response);
                 break;
+            case "admin":
+                admin(request, response);
+                break;
             case "joinnow":
-                //Processing code here
                 //Foward request & respone to view
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+                break;
+            case "logout":
+                logout(request, response);
                 break;
             default:
                 //Show error page
@@ -80,25 +75,28 @@ public class UserController extends HttpServlet {
     protected void signin_handler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String email = request.getParameter("email");
+            String emailOrPhone = request.getParameter("emailOrPhone");
             String password = request.getParameter("password");
             //Kiem tra thong trong DB
             accountFacade af = new accountFacade();
-            account acc = af.login(email, password);
+            account acc = af.signin(emailOrPhone, password);
             if (acc == null) {
-                System.out.println("test1");
                 //Neu login khong thanh cong thi quay ve login form 
                 //de nhap lai thong tin
                 request.setAttribute("message", "Incorrect email or password.");
                 request.getRequestDispatcher("/user/signin.do").forward(request, response);
             } else {
-                System.out.println("test2");
                 //Neu login thanh cong
                 //Luu account vao session
                 HttpSession session = request.getSession();
                 session.setAttribute("account", acc);
-                //Quay ve Home Page
-                response.sendRedirect(request.getContextPath() + "/home/index.do");
+                session.setAttribute("role", acc.getRole());
+                if (acc.getRole().equals("ROLE_ADMIN")) {
+                    //forward to admin page
+                } else {
+                    //Quay ve Home Page
+                    response.sendRedirect(request.getContextPath() + "/home/index.do");
+                }
             }
         } catch (Exception ex) {
             request.setAttribute("message", ex.toString());
@@ -106,6 +104,24 @@ public class UserController extends HttpServlet {
         }
     }
 
+    protected void logout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //Xoa session
+        HttpSession session = request.getSession();
+        session.invalidate();
+        //Quay ve trang chu
+        response.sendRedirect(request.getContextPath() + "/home/index.do");
+    }
+
+    protected void admin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+         HttpSession session = request.getSession();
+        if(session.getAttribute("role")==null){
+          request.getRequestDispatcher("/user/signin.do").forward(request, response);
+        }else if(!session.getAttribute("role").equals("ROLE_ADMIN")){
+            response.sendRedirect(request.getContextPath() + "/home/index.do");
+        }
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
