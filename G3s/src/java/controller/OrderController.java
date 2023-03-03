@@ -50,7 +50,6 @@ public class OrderController extends HttpServlet {
 
         String controller = (String) request.getAttribute("controller");
         String action = (String) request.getAttribute("action");
-        HttpSession session = request.getSession();
 
         switch (action) {
             case "buynow":
@@ -81,10 +80,13 @@ public class OrderController extends HttpServlet {
                 break;
             case "pay":
                 //Processing code here
-                //check login here
-                
-                //in bill + luu don hang vao db here
                 try {
+                    //check login here
+                    if (!check_login(request, response)) {
+                        response.sendRedirect(request.getContextPath() + "/user/signin.do");
+                        break;
+                    }
+                    //in bill + luu don hang vao db here
                     pay(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
@@ -150,7 +152,7 @@ public class OrderController extends HttpServlet {
         }
         cart.add(item);
 
-        response.sendRedirect(request.getContextPath()+"/watch/index.do");
+        response.sendRedirect(request.getContextPath() + "/watch/index.do");
     }
 
     protected void cart(HttpServletRequest request, HttpServletResponse response)
@@ -192,14 +194,14 @@ public class OrderController extends HttpServlet {
 
     protected void pay(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        String op=request.getParameter("op");
+        String op = request.getParameter("op");
         orderdetailFacade odf = new orderdetailFacade();
         orderheaderFacade ohf = new orderheaderFacade();
 
         //Lay cart tu session
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null||op!=null) {
+        if (cart == null || op != null) {
             //Neu trong session chua co cart thi tao moi
             cart = new Cart();
             Item item = (Item) session.getAttribute("item");
@@ -221,6 +223,15 @@ public class OrderController extends HttpServlet {
 //            odf.create(od);
         }
         request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+    }
+
+    protected boolean check_login(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("acc") == null) {
+            return false;
+        }
+        return true;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

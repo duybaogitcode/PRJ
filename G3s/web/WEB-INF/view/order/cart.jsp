@@ -44,7 +44,7 @@
     </tr>
 </table>
 <br>
-<c:if test="total>0">
+<c:if test="${total>0}">
     <a href="<c:url value ="/order/pay.do" />">Order</a>
     <a href="<c:url value ="/order/cart.do?op=empty" />">Empty cart</a>
 </c:if>
