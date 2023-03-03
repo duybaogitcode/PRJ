@@ -55,8 +55,6 @@ public class OrderController extends HttpServlet {
         switch (action) {
             case "buynow":
                 //Processing code here
-                //Foward request & respone to view
-
                 try {
                     buynow(request, response);
                 } catch (SQLException ex) {
@@ -83,24 +81,14 @@ public class OrderController extends HttpServlet {
                 break;
             case "pay":
                 //Processing code here
-                //Foward request & respone to view
+                //check login here
+                
+                //in bill + luu don hang vao db here
                 try {
                     pay(request, response);
                 } catch (SQLException ex) {
                     Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                orderdetailFacade odf = new orderdetailFacade();
-                productFacade prf = new productFacade();
-
-                try {
-                    orderdetail ord = odf.read(request.getParameter("id"));
-                    Product pdt = prf.read(String.valueOf(ord.getProductId()));
-                    session.setAttribute("orderdetail", pdt);
-                } catch (SQLException ex) {
-                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
 
             default:
@@ -219,7 +207,7 @@ public class OrderController extends HttpServlet {
             session.setAttribute("pay", cart);
         }
 
-        //Luu thong tin don hang
+        //Luu thong tin don hang(uncomplete)
         for (int key : cart.getMap().keySet()) {
             Item item = cart.getMap().get(key);
             orderheader oh = new orderheader(1, new Date(), "ongoing", 2);
