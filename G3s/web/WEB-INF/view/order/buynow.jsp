@@ -35,9 +35,9 @@
     </tr>
     <tr>
         <td colspan="3" align="left">Total</td>
-        <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${item.cost}"/></td>
+        <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${total}"/></td>
     </tr>
 </table>
 <br>
-<a href="<c:url value ="/order/pay.do" />">Order</a>
+<a href="<c:url value ="/order/pay.do?op=buynow" />">Order</a>
 <a href="<c:url value ="/watch/index.do" />">Continue Shopping</a>

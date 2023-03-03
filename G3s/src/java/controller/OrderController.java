@@ -63,10 +63,23 @@ public class OrderController extends HttpServlet {
                     Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 break;
+            case "add2cart":
+                //Processing code here
+                //Foward request & respone to view
+                try {
+                    add2cart(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                break;
             case "cart":
                 //Processing code here
                 //Foward request & respone to view
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+                try {
+                    cart(request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrderController.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 break;
             case "pay":
                 //Processing code here
@@ -132,22 +145,78 @@ public class OrderController extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
     }
 
+    protected void add2cart(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String id = request.getParameter("id");
+        productFacade pf = new productFacade();
+        Product product = pf.read(id);
+        Item item = new Item(product, 1);
+
+        //Lay cart tu session
+        HttpSession session = request.getSession();
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cart == null) {
+            //Neu trong session chua co cart thi tao moi
+            cart = new Cart();
+            session.setAttribute("cart", cart);
+        }
+        cart.add(item);
+
+        response.sendRedirect(request.getContextPath()+"/watch/index.do");
+    }
+
+    protected void cart(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException, SQLException {
+        String op = request.getParameter("op");
+        String id = request.getParameter("id");
+        HttpSession session = request.getSession();
+        productFacade pf = new productFacade();
+        Product product = pf.read(id);
+        Item item = new Item(product, 1);
+
+        //Lay cart tu session
+        Cart cart = (Cart) session.getAttribute("cart");
+        if (cart == null) {
+            //Neu trong session chua co cart thi tao moi
+            cart = new Cart();
+            session.setAttribute("cart", cart);
+        }
+
+        if (op != null) {
+            switch (op) {
+                case "minus":
+                    cart.minus(item);
+                    break;
+                case "add":
+                    cart.add(item);
+                    break;
+                case "remove":
+                    cart.remove(Integer.parseInt(id));
+                    break;
+                case "empty":
+                    cart.empty();
+                    break;
+            }
+        }
+
+        request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+    }
+
     protected void pay(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-
+        String op=request.getParameter("op");
         orderdetailFacade odf = new orderdetailFacade();
         orderheaderFacade ohf = new orderheaderFacade();
 
         //Lay cart tu session
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) {
-            //Neu trong session chua co cart -> buynow
+        if (cart == null||op!=null) {
+            //Neu trong session chua co cart thi tao moi
             cart = new Cart();
-            session.setAttribute("cart", cart);
             Item item = (Item) session.getAttribute("item");
-            System.out.println(item);
             cart.add(item);
+            session.setAttribute("pay", cart);
         }
 
         //Luu thong tin don hang

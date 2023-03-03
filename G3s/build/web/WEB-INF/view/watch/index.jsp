@@ -30,7 +30,7 @@
 
                         <div class="show-product-box-btn">
                             <a href="<c:url value ="/order/buynow.do?id=${product.id}"/>" class="show-product-box-btn-buy">Buy now</a>
-                            <a href="#" class="show-product-box-btn-add">Add to cart</a>
+                            <a href="<c:url value ="/order/add2cart.do?id=${product.id}"/>" class="show-product-box-btn-add">Add to cart</a>
                         </div>
                     </div>
                 </td>

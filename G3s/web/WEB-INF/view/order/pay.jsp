@@ -18,7 +18,7 @@
         <th>Subtotal</th>
     </tr>
     <c:set var="total" value="0"></c:set>
-    <c:forEach var="item" items="${sessionScope.cart.items}">
+    <c:forEach var="item" items="${sessionScope.pay.items}">
     <c:set var="total" value="${total + item.cost}"></c:set>
         <tr>
 
@@ -33,7 +33,7 @@
     </c:forEach>
     <tr>
         <td colspan="3" align="left">Total</td>
-        <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${item.cost}"/></td>
+        <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${total}"/></td>
     </tr>
 </table>
 <br>
