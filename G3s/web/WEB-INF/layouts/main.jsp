@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="icons">
-                    <i><ion-icon name="cart"></ion-icon></i>
+                    <a href="<c:url value="/cart/show.do"/>"  <i><ion-icon name="cart"></ion-icon></i> </a>
                 </div>
 
             </div>

@@ -12,9 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.category;
 import model.product;
 
 /**
@@ -23,8 +20,10 @@ import model.product;
  */
 public class productFacade {
 
+    private List<product> list = null;
+
     public List<product> select() throws SQLException {
-        List<product> list = null;
+
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -46,6 +45,33 @@ public class productFacade {
         }
         con.close();
         return list;
+    }
+
+    public product selectById(int id) {
+       //cach1
+        for (product pro : list) {
+            if (pro.getId() == id) {
+                return pro;
+            }
+
+        }
+        return null;
+        //cach 2
+//        List<product> list = new ArrayList<>();
+//        String sql = "select id , name,  description, img, price,discount, categoryId  from product WHERE id=?";
+//        try {
+//            Connection con = DBContext.getConnection();
+//            //Tạo đối tượng statement
+//            Statement stm = con.createStatement();
+//            ResultSet rs = stm.executeQuery(sql);
+//            while (rs.next()) {
+//
+//                return(new product(rs.getInt(1), rs.getString(2), rs.getString(3),rs.getString(4), rs.getFloat(5), rs.getFloat(6), rs.getString(7)));
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//        return null;
     }
 
     public List<product> pagingProduct(int index) throws SQLException {
