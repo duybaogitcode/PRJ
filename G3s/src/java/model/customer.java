@@ -9,15 +9,15 @@ package model;
  *
  * @author admin
  */
-public class customer {
+public class Customer {
     private int id;
     private String catagory;
     private String shipToAddress;
 
-    public customer() {
+    public Customer() {
     }
 
-    public customer(int id, String catagory, String shipToAddress) {
+    public Customer(int id, String catagory, String shipToAddress) {
         this.id = id;
         this.catagory = catagory;
         this.shipToAddress = shipToAddress;

@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="icons">
-                    <i><ion-icon name="cart"></ion-icon></i>
+                    <a href="<c:url value="/cart/index.do"/>" <i><ion-icon name="cart"></ion-icon></i> </a> 
                 </div>
 
             </div>
@@ -78,7 +78,7 @@
                             <a class="nav-link" href="<c:url value ="/home/index.do" />"><ion-icon name="home"></ion-icon> Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<c:url value ="/watch/index.do" />"><ion-icon name="watch"></ion-icon> Watches</a>
+                            <a class="nav-link" href="<c:url value ="/watch/filter.do" />"><ion-icon name="watch"></ion-icon> Watches</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/g3s/#trending"><ion-icon name="trending-up"></ion-icon> Trending</a>

@@ -14,16 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.account;
+import model.Account;
 
 /**
  *
  * @author admin
  */
-public class accountFacade {
+public class AccountFacade {
 
-    public List<account> select() throws SQLException {
-        List<account> list = null;
+    public List<Account> select() throws SQLException {
+        List<Account> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -33,7 +33,7 @@ public class accountFacade {
         list = new ArrayList<>();
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
-            account acc = new account();
+            Account acc = new Account();
             acc.setId(rs.getInt("id"));
             acc.setName(rs.getString("name"));
             acc.setAddress(rs.getString("address"));
@@ -48,7 +48,7 @@ public class accountFacade {
         return list;
     }
 
-    public void create(account acc) throws SQLException {
+    public void create(Account acc) throws SQLException {
         Connection con = DBContext.getConnection();
         PreparedStatement stm = con.prepareStatement("insert Account values(?,?,?,?,?,?,?)");
         stm.setInt(1, acc.getId());
@@ -62,8 +62,8 @@ public class accountFacade {
         con.close();
     }
 
-    public account read(String id) throws SQLException {
-        account acc = null;
+    public Account read(String id) throws SQLException {
+        Account acc = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng PreparedStatement
@@ -72,7 +72,7 @@ public class accountFacade {
         stm.setString(1, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
-            acc = new account();
+            acc = new Account();
             acc.setId(rs.getInt("id"));
             acc.setName(rs.getString("name"));
             acc.setAddress(rs.getString("address"));
@@ -85,7 +85,7 @@ public class accountFacade {
         return acc;
     }
 
-    public void update(account acc) throws SQLException {
+    public void update(Account acc) throws SQLException {
         Connection con = DBContext.getConnection();
         PreparedStatement stm = con.prepareStatement("update Account set name = ?, address = ?, phone = ?, email = ?, password =?, role = ? where id = ?");
         stm.setString(1, acc.getName());

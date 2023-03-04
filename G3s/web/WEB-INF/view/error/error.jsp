@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<h2>Hello Bruh (ERROR)</h2>
+<%@taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<img src="<c:url value="/img/error.jpeg"/>" style="width: 100%"/>
 ${message}

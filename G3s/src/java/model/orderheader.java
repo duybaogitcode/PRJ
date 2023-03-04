@@ -11,16 +11,16 @@ import java.util.Date;
  *
  * @author admin
  */
-public class orderheader {
+public class OrderHeader {
     private int id;
     private Date date;
     private String status;
     private int customerId;
 
-    public orderheader() {
+    public OrderHeader() {
     }
 
-    public orderheader(int id, Date date, String status, int customerId) {
+    public OrderHeader(int id, Date date, String status, int customerId) {
         this.id = id;
         this.date = date;
         this.status = status;

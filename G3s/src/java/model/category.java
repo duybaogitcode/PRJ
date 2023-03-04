@@ -9,15 +9,15 @@ package model;
  *
  * @author duyba
  */
-public class category {
+public class Category {
 
     private String id;
     private String name;
 
-    public category() {
+    public Category() {
     }
 
-    public category(String id, String name) {
+    public Category(String id, String name) {
         this.id = id;
         this.name = name;
     }

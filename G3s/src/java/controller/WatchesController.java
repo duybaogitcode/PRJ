@@ -5,21 +5,19 @@
  */
 package controller;
 
-import dal.categoryFacade;
-import dal.productFacade;
+import dal.CategoryFacade;
+import dal.ProductFacade;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.category;
-import model.product;
+import model.Category;
+import model.Product;
 
 /**
  *
@@ -42,15 +40,17 @@ public class WatchesController extends HttpServlet {
         String controller = (String) request.getAttribute("controller");
         String action = (String) request.getAttribute("action");
         getListCate(request, response);
-        System.out.println("aaaa");
         switch (action) {
             case "index":
-                showAll(request, response);
+                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             case "filter":
-                System.out.println("aaa");
-                System.out.println(request.getContextPath());
-                response.sendRedirect(request.getContextPath() + "/watch/index.do");
+                System.out.println("test filter");
+                filter(request, response);
+                break;
+            case "checkout":
+                System.out.println("checkout rồi nè");
+                request.getRequestDispatcher("/watch/checkout.do").forward(request, response);
                 break;
         }
 
@@ -62,19 +62,22 @@ public class WatchesController extends HttpServlet {
         if (indexPage == null) {
             indexPage = "1";
         }
-        int index = Integer.parseInt(indexPage);
+
         try {
-            productFacade pf = new productFacade();
-            List<product> list = pf.select();
-            int endPage = list.size() / 6;
-            if (list.size() % 6 != 0) {
+            int index = Integer.parseInt(indexPage);
+            ProductFacade pf = new ProductFacade();
+            int numPage= pf.getTotalProduct();
+            System.out.println("Numpage : " + numPage);
+            int endPage = numPage/6;
+            System.out.println(endPage);
+            if (numPage % 6 != 0) {
                 endPage++;
             }
-            List<product> listPaging = pf.pagingProduct(index);
+            List<Product> listPaging = pf.pagingProduct(index);
             request.setAttribute("listPaging", listPaging);
             request.setAttribute("endPage", endPage);
-            //Forward request & response to the main layout
-            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+            request.setAttribute("link", "watches");
+            request.getRequestDispatcher("/watch/index.do").forward(request, response);
         } catch (SQLException ex) {
             //Show the error page
             request.setAttribute("message", ex.getMessage());
@@ -86,11 +89,52 @@ public class WatchesController extends HttpServlet {
 
     protected void getListCate(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        categoryFacade cf = new categoryFacade();
+        CategoryFacade cf = new CategoryFacade();
         try {
-            List<category> listCate = cf.select();
+            List<Category> listCate = cf.select();
             request.setAttribute("listCate", listCate);
         } catch (SQLException ex) {
+            request.setAttribute("message", ex.getMessage());
+            request.setAttribute("controller", "error");
+            request.setAttribute("action", "error");
+            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+        }
+    }
+
+    protected void filter(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String indexPage = request.getParameter("index");
+        String[] categoryIds = request.getParameterValues("category");
+        System.out.println(categoryIds);
+        String minPrice = request.getParameter("min");
+        System.out.println(minPrice);
+        String maxPrice = request.getParameter("max");
+        System.out.println(maxPrice);
+        if (indexPage == null) {
+            indexPage = "1";
+        }
+
+        try {
+            int index = Integer.parseInt(indexPage);
+            ProductFacade pf = new ProductFacade();
+            int numPage= pf.getTotalProduct(categoryIds, minPrice, maxPrice);
+            System.out.println("Numpage : " + numPage);
+            int endPage = numPage / 6;
+            System.out.println(endPage);
+            if (numPage % 6 != 0) {
+                endPage++;
+            }
+            System.out.println(endPage);
+            List<Product> listPaging = pf.pagingProduct(index, categoryIds, minPrice, maxPrice);
+            request.setAttribute("listPaging", listPaging);
+            request.setAttribute("endPage", endPage);
+            request.setAttribute("link", "filter");
+            request.setAttribute("minPrice", minPrice);
+            request.setAttribute("maxPrice", maxPrice);
+            request.setAttribute("categoryIds", categoryIds);
+            request.getRequestDispatcher("/watch/index.do").forward(request, response);
+        } catch (SQLException ex) {
+            //Show the error page
             request.setAttribute("message", ex.getMessage());
             request.setAttribute("controller", "error");
             request.setAttribute("action", "error");

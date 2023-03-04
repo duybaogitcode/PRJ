@@ -13,17 +13,17 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import model.customer;
-import model.orderheader;
+import model.Customer;
+import model.OrderHeader;
 
 /**
  *
  * @author admin
  */
-public class orderheaderFacade {
+public class OrderHeaderFacade {
 
-    public List<orderheader> select() throws SQLException {
-        List<orderheader> list = null;
+    public List<OrderHeader> select() throws SQLException {
+        List<OrderHeader> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -33,7 +33,7 @@ public class orderheaderFacade {
         list = new ArrayList<>();
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
-            orderheader orh = new orderheader();
+            OrderHeader orh = new OrderHeader();
             orh.setId(rs.getInt("id"));
             orh.setDate(rs.getDate("date"));
             orh.setStatus(rs.getString("status"));
@@ -45,7 +45,7 @@ public class orderheaderFacade {
         return list;
     }
 
-    public void create(orderheader orh) throws SQLException {
+    public void create(OrderHeader orh) throws SQLException {
         Connection con = DBContext.getConnection();
         PreparedStatement stm = con.prepareStatement("insert OrderHeader values(?,?,?,?)");
         stm.setInt(1, orh.getId());
@@ -57,8 +57,8 @@ public class orderheaderFacade {
         con.close();
     }
 
-    public orderheader read(String id) throws SQLException {
-        orderheader orh = null;
+    public OrderHeader read(String id) throws SQLException {
+        OrderHeader orh = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng PreparedStatement
@@ -67,7 +67,7 @@ public class orderheaderFacade {
         stm.setString(1, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
-            orh = new orderheader();
+            orh = new OrderHeader();
             orh.setId(rs.getInt("id"));
             orh.setDate(rs.getDate("date"));
             orh.setStatus(rs.getString("status"));
@@ -77,7 +77,7 @@ public class orderheaderFacade {
         return orh;
     }
 
-    public void update(orderheader orh) throws SQLException {
+    public void update(OrderHeader orh) throws SQLException {
         Connection con = DBContext.getConnection();
         PreparedStatement stm = con.prepareStatement("update OrderHeader set date = ?, status = ?, customerId = ? where id = ?");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

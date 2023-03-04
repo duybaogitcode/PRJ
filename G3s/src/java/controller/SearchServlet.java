@@ -5,7 +5,6 @@
  */
 package controller;
 
-import dal.AccountFacade;
 import dal.ProductFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,15 +17,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Account;
 import model.Product;
 
 /**
  *
  * @author duyba
  */
-@WebServlet(name = "UserController", urlPatterns = {"/user"})
-public class UserController extends HttpServlet {
+@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
+public class SearchServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,39 +38,36 @@ public class UserController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String controller = (String) request.getAttribute("controller");
-        String action = (String) request.getAttribute("action");
-        switch (action) {
-            case "signin":
-                //Processing code here
-                //Foward request & respone to view
-                System.out.println("test ne bao");
-                
-                AccountFacade af = new AccountFacade();
-        {
-            try {
-                List<Account> list = af.select();
-                System.out.println(list);
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        String txtSearch = request.getParameter("txt");
+        ProductFacade pf = new ProductFacade();
+        String name = request.getParameter("txt");
+        System.out.println("search test");
+        try {
+            List<Product> list = pf.getListPrByName(name);
+            PrintWriter out = response.getWriter();
+            out.println("<table>");
+            for (int i = 0; i < list.size(); i++) {
+                Product pr = list.get(i);
+                out.println("<td>");
+                out.println("<div class=\"show-product-box\">");
+                out.println("<h3>" + pr.getName() + "</h3>");
+                out.println("<img src=\"/img/" + pr.getImage() + "\">");
+                out.println("<p style=\"font-weight: 700;\">" + pr.getCategoryID() + "</p>");
+                out.println("<p class=\"price\">" + pr.getPrice() + "</p>");
+                out.println("<div class=\"show-product-box-btn\">");
+                out.println("<a href=\"#\" class=\"show-product-box-btn-buy\">Buy now</a>");
+                out.println("<a href=\"#\" class=\"show-product-box-btn-add\" >Add to cart</a>");
+                out.println("</div>");
+                out.println("</div>");
+                out.println("</td>");
+                if ((i + 1) % 3 == 0 || i == list.size() - 1) {
+                    out.println("</tr>");
+                }
             }
-        }
-                
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
-                break;
-            case "joinnow":
-                //Processing code here
-                //Foward request & respone to view
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
-                break;
-            default:
-                //Show error page
-                request.setAttribute("Message", "Invalid");
-                //set view name
-                request.setAttribute("action", "error");
-                request.setAttribute("controller", "error");
-                //Foward request to layout, de trong web info thi client ko truy cap dc
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+            out.println("</table>");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
