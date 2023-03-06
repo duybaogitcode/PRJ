@@ -48,6 +48,7 @@ public class OrderController extends HttpServlet {
         String action = (String) request.getAttribute("action");
 
         switch (action) {
+
             case "buynow":
                 //Processing code here
                 try {
@@ -148,7 +149,9 @@ public class OrderController extends HttpServlet {
         }
         cart.add(item);
 
-        response.sendRedirect(request.getContextPath() + "/watch/filter.do");
+        String urlParam = (String) session.getAttribute("urlParam");
+
+        response.sendRedirect(request.getContextPath() + "/watch/filter.do?" + urlParam + "#" + id);
     }
 
     protected void cart(HttpServletRequest request, HttpServletResponse response)
@@ -184,7 +187,6 @@ public class OrderController extends HttpServlet {
                     break;
             }
         }
-
         request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
     }
 
@@ -205,6 +207,7 @@ public class OrderController extends HttpServlet {
             session.setAttribute("pay", cart);
         }
 
+
         //Luu thong tin don hang(uncomplete)
         for (int key : cart.getMap().keySet()) {
             Item item = cart.getMap().get(key);
@@ -218,13 +221,14 @@ public class OrderController extends HttpServlet {
 //            ohf.create(oh);
 //            odf.create(od);
         }
+
         request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
     }
 
     protected boolean check_login(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         HttpSession session = request.getSession();
-        if (session.getAttribute("acc") == null) {
+        if (session.getAttribute("account") == null) {
             return false;
         }
         return true;

@@ -37,7 +37,7 @@
                     <input type="checkbox" id="category" name="category" value="${category.id}" ${checked}>${category.name}<br>
                 </c:forEach>
 
-                <h5>Sort By</h5>
+                <h5>Sort By Price</h5>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="sort" id="sort-price-asc" value="price_asc">
                     <label class="form-check-label" for="sort-price-asc">
@@ -154,53 +154,58 @@
         <img src="<c:url value="/img/no-product-found.png" />" style="display: block; margin: 0 auto; width: 50%;">
     </c:if>
 
-    <c:if test="${not empty listPaging}">
-        <table>
-            <c:forEach var="product" items="${listPaging}" varStatus="loop">
 
-                <c:if test="${loop.index % 3 == 0}">
-                    <tr>
-                    </c:if>
-                    <td>
-                        <div class="show-product-box">
-                            <!-- show danh sách sản phẩm-->
-                            <h3>${product.name}</h3>
-                            <img src="<c:url value="/img/${product.image}" />">
-                            </br>
-                            <c:forEach var="cate" items="${listCate}">
-                                <c:if test="${cate.id == product.categoryID}">
-                                    <p style="font-weight: 700;" >${cate.name}</p>
-                                </c:if>
-                            </c:forEach>
-                            <p class="price"><fmt:formatNumber value="${product.price}" type = "currency" /></p>
+        <div id="show-product-table">
+        <c:if test="${not empty listPaging}">
 
-                            <div class="show-product-box-btn">
-                                <a href="<c:url value ="/order/buynow.do?id=${product.id}"/>" class="show-product-box-btn-buy">Buy now</a>
-                                <a href="<c:url value ="/order/add2cart.do?id=${product.id}"/>" class="show-product-box-btn-add">Add to cart</a>
+
+            <table>
+                <c:forEach var="product" items="${listPaging}" varStatus="loop">
+
+                    <c:if test="${loop.index % 3 == 0}">
+                        <tr>
+                        </c:if>
+                        <td>
+                            <div class="show-product-box" id="${product.id}">
+                                <h3>${product.name}</h3>
+                                <img src="<c:url value="/img/${product.image}" />">
+                                </br>
+                                <c:forEach var="cate" items="${listCate}">
+                                    <c:if test="${cate.id == product.categoryID}">
+                                        <p style="font-weight: 700;" >${cate.name}</p>
+                                    </c:if>
+                                </c:forEach>
+                                <p class="price"><fmt:formatNumber value="${product.price}" type = "currency" /></p>
+
+                                <div class="show-product-box-btn">
+                                    <a href="<c:url value ="/order/buynow.do?id=${product.id}"/>" class="show-product-box-btn-buy">Buy now</a>
+                                    <a href="<c:url value ="/order/add2cart.do?id=${product.id}"/>" class="show-product-box-btn-add">Add to cart</a>
+                                </div>
                             </div>
-                        </div>
-                    </td>
+                        </td>
 
-                    <c:if test="${(loop.index + 1) % 3 == 0 || loop.last}">
-                    </tr>
-                </c:if>
-            </c:forEach>
-        </table>
+                        <c:if test="${(loop.index + 1) % 3 == 0 || loop.last}">
+                        </tr>
+                    </c:if>
+                </c:forEach>
+            </table>
 
-        <div class="index">
-            <c:forEach begin="1" end="${endPage}" var="i">
-                <c:url var="url" value="/watch/${link}.do">     
-                    <c:param name="index" value="${i}"/>
-                    <c:forEach var="categoryId" items="${categoryIds}" varStatus="status">
-                        <c:param name="category" value="${categoryId}" />
-                    </c:forEach>   
-                    <c:param name="min" value="${minPrice}"/>
-                    <c:param name="max" value="${maxPrice}"/>
-                </c:url>
-                <a class="page-index" href="${url}">${i}</a>
-            </c:forEach>
-        </div>
-    </c:if>
+            <div class="index">
+                <c:forEach begin="1" end="${endPage}" var="i">
+                    <c:url var="url" value="/watch/${link}.do">     
+                        <c:param name="index" value="${i}"/>
+                        <c:forEach var="categoryId" items="${categoryIds}" varStatus="status">
+                            <c:param name="category" value="${categoryId}" />
+                        </c:forEach>   
+                        <c:param name="min" value="${minPrice}"/>
+                        <c:param name="max" value="${maxPrice}"/>
+                    </c:url>
+                    <a class="page-index" href="${url}">${i}</a>
+                </c:forEach>
+            </div>
+        </c:if>
+    </div>
+
 </div>
 
 

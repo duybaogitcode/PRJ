@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Account;
 import model.Product;
 
@@ -46,33 +47,161 @@ public class UserController extends HttpServlet {
             case "signin":
                 //Processing code here
                 //Foward request & respone to view
-                System.out.println("test ne bao");
-                
-                AccountFacade af = new AccountFacade();
-        {
-            try {
-                List<Account> list = af.select();
-                System.out.println(list);
-            } catch (SQLException ex) {
-                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-                
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+                break;
+            case "signin_handler":
+                signin_handler(request, response);
+                break;
+            case "admin":
+                admin(request, response);
                 break;
             case "joinnow":
                 //Processing code here
                 //Foward request & respone to view
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
+            case "joinnow_handler":
+                joinnow_handler(request, response);
+                break;
+            case "logout":
+                logout(request, response);
+                break;
             default:
                 //Show error page
                 request.setAttribute("Message", "Invalid");
-                //set view name
-                request.setAttribute("action", "error");
-                request.setAttribute("controller", "error");
-                //Foward request to layout, de trong web info thi client ko truy cap dc
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+        }
+    }
+
+    protected void signin_handler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String emailOrPhone = request.getParameter("emailOrPhone");
+            String password = request.getParameter("password");
+            //Kiem tra thong trong DB
+            AccountFacade af = new AccountFacade();
+            Account acc = af.signin(emailOrPhone, password);
+            if (acc == null) {
+                //Neu login khong thanh cong thi quay ve login form 
+                //de nhap lai thong tin
+                request.setAttribute("message", "Incorrect email or password.");
+                request.getRequestDispatcher("/user/signin.do").forward(request, response);
+            } else {
+                //Neu login thanh cong
+                //Luu account vao session
+                HttpSession session = request.getSession();
+                session.setAttribute("account", acc);
+                session.setAttribute("role", acc.getRole());
+                if (acc.getRole().equals("ROLE_ADMIN")) {
+                    //forward to admin page
+                } else {
+                    //Quay ve Home Page
+                    response.sendRedirect(request.getContextPath() + "/home/index.do");
+                }
+            }
+        } catch (Exception ex) {
+            request.setAttribute("message", ex.toString());
+            request.getRequestDispatcher("/user/signin.do").forward(request, response);
+        }
+    }
+
+    protected void logout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //Xoa session
+        HttpSession session = request.getSession();
+        session.invalidate();
+        //Quay ve trang chu
+        response.sendRedirect(request.getContextPath() + "/home/index.do");
+    }
+
+    protected void admin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("role") == null) {
+            request.getRequestDispatcher("/user/signin.do").forward(request, response);
+        } else if (!session.getAttribute("role").equals("ROLE_ADMIN")) {
+            response.sendRedirect(request.getContextPath() + "/home/index.do");
+        }
+    }
+    
+    protected void joinnow_handler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            //Lay thong tin register
+            String username = request.getParameter("username");
+            String email = request.getParameter("email");
+            String tel = request.getParameter("tel");
+            String address = request.getParameter("address");
+            String password = request.getParameter("password");
+            String passConfirm = request.getParameter("passConfirm");
+
+            //Tao doi tuong account
+            Account acc = new Account();
+            acc.setName(username);
+            acc.setAddress(address);
+            acc.setPhone(tel);
+            acc.setEmail(email);
+            acc.setPassword(password);
+            acc.setEnable(true);
+            acc.setRole("ROLE_CUSTOMER");
+            request.setAttribute("acc", acc);
+            AccountFacade af = new AccountFacade();
+            int doneCheck = 0;
+
+            //Username check
+            if (username == null || username.equals("")) {
+                request.setAttribute("messageUser", "Username must not be blank.");
+            } else {
+                doneCheck++;
+            }
+            //Email check
+            if (email == null || email.equals("")) {
+                request.setAttribute("messageEmail", "Email must not be blank.");
+            } else if (af.read(email) != null) {
+                request.setAttribute("messageEmail", "Email is existed.");
+            } else {
+                doneCheck++;
+            }
+            //Phone check
+            if (tel == null || tel.equals("")) {
+                request.setAttribute("messagePhone", "Phone must not be blank.");
+            } else {
+                doneCheck++;
+            }
+
+            //Address check
+            if (address == null || address.equals("")) {
+                request.setAttribute("messageAddress", "Address must not be blank.");
+            } else {
+                doneCheck++;
+            }
+
+            //Password check
+            if (password == null || password.equals("")) {
+                request.setAttribute("messagePass", "Password must not be blank.");
+            } else if (password.length() < 5) {
+                request.setAttribute("messagePass", "Password must be at least 5 characters.");
+            } else {
+                doneCheck++;
+            }
+
+            //Confirm Password check
+            if (passConfirm == null || passConfirm.equals("")) {
+                request.setAttribute("messagePassComfirm", "Password Comfirm must not be blank.");
+            } else if (!password.equals(passConfirm)) {
+                request.setAttribute("messagePassComfirm", "Passwords do not match.");
+            } else {
+                doneCheck++;
+            }
+
+            //Create new account
+            if (doneCheck == 6) {
+                af.create(acc);
+                request.setAttribute("messageDone", "Done");
+            }
+
+            request.getRequestDispatcher("/user/joinnow.do").forward(request, response);
+
+        } catch (SQLException ex) {
         }
     }
 

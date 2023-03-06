@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Category;
 import model.Product;
 
@@ -45,7 +46,8 @@ public class WatchesController extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             case "filter":
-                System.out.println("test filter");
+                HttpSession session = request.getSession();
+                session.setAttribute("urlParam", request.getQueryString());
                 filter(request, response);
                 break;
             case "checkout":
@@ -56,37 +58,36 @@ public class WatchesController extends HttpServlet {
 
     }
 
-    protected void showAll(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String indexPage = request.getParameter("index");
-        if (indexPage == null) {
-            indexPage = "1";
-        }
-
-        try {
-            int index = Integer.parseInt(indexPage);
-            ProductFacade pf = new ProductFacade();
-            int numPage= pf.getTotalProduct();
-            System.out.println("Numpage : " + numPage);
-            int endPage = numPage/6;
-            System.out.println(endPage);
-            if (numPage % 6 != 0) {
-                endPage++;
-            }
-            List<Product> listPaging = pf.pagingProduct(index);
-            request.setAttribute("listPaging", listPaging);
-            request.setAttribute("endPage", endPage);
-            request.setAttribute("link", "watches");
-            request.getRequestDispatcher("/watch/index.do").forward(request, response);
-        } catch (SQLException ex) {
-            //Show the error page
-            request.setAttribute("message", ex.getMessage());
-            request.setAttribute("controller", "error");
-            request.setAttribute("action", "error");
-            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
-        }
-    }
-
+//    protected void showAll(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        String indexPage = request.getParameter("index");
+//        if (indexPage == null) {
+//            indexPage = "1";
+//        }
+//
+//        try {
+//            int index = Integer.parseInt(indexPage);
+//            ProductFacade pf = new ProductFacade();
+//            int numPage = pf.getTotalProduct();
+//            System.out.println("Numpage : " + numPage);
+//            int endPage = numPage / 6;
+//            System.out.println(endPage);
+//            if (numPage % 6 != 0) {
+//                endPage++;
+//            }
+//            List<Product> listPaging = pf.pagingProduct(index);
+//            request.setAttribute("listPaging", listPaging);
+//            request.setAttribute("endPage", endPage);
+//            request.setAttribute("link", "watches");
+//            request.getRequestDispatcher("/watch/index.do").forward(request, response);
+//        } catch (SQLException ex) {
+//            //Show the error page
+//            request.setAttribute("message", ex.getMessage());
+//            request.setAttribute("controller", "error");
+//            request.setAttribute("action", "error");
+//            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+//        }
+//    }
     protected void getListCate(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CategoryFacade cf = new CategoryFacade();
@@ -117,7 +118,7 @@ public class WatchesController extends HttpServlet {
         try {
             int index = Integer.parseInt(indexPage);
             ProductFacade pf = new ProductFacade();
-            int numPage= pf.getTotalProduct(categoryIds, minPrice, maxPrice);
+            int numPage = pf.getTotalProduct(categoryIds, minPrice, maxPrice);
             System.out.println("Numpage : " + numPage);
             int endPage = numPage / 6;
             System.out.println(endPage);

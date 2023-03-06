@@ -5,6 +5,7 @@
  */
 package dal;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -106,8 +107,26 @@ public class AccountFacade {
         int count = stm.executeUpdate();
         con.close();
     }
-    
 
+    public Account signin(String emailOrPhone, String password) throws SQLException, NoSuchAlgorithmException {
+        Account acc = null;
+        Connection con = DBContext.getConnection();
+        PreparedStatement stm = con.prepareStatement("select * from account where email = ? or phone = ? and password = ?");
+        stm.setString(1, emailOrPhone);
+        stm.setString(2, emailOrPhone);
+        stm.setString(3, password);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            acc = new Account();
+            acc.setId(rs.getInt("id"));
+            acc.setName(rs.getString("name"));
+            acc.setAddress(rs.getString("address"));
+            acc.setPhone(rs.getString("phone"));
+            acc.setEmail(rs.getString("email"));
+            acc.setPassword(rs.getString("password"));
+            acc.setRole(rs.getString("role"));
+        }
+        con.close();
+        return acc;
+    }
 }
-
-        

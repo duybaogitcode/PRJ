@@ -5,10 +5,12 @@
  */
 package controller;
 
+import dal.CategoryFacade;
 import dal.ProductFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,14 +19,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Category;
 import model.Product;
 
 /**
  *
  * @author duyba
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "SearchController", urlPatterns = {"/search"})
+public class SearchController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,38 +40,55 @@ public class SearchServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String txtSearch = request.getParameter("txt");
+        System.out.println("kodc");
+        String keyword = request.getParameter("keyword");
+        List<Product> products = new ArrayList<>();
+        List<Category> categories = new ArrayList<>();
+        CategoryFacade ctf = new CategoryFacade();
         ProductFacade pf = new ProductFacade();
-        String name = request.getParameter("txt");
-        System.out.println("search test");
         try {
-            List<Product> list = pf.getListPrByName(name);
-            PrintWriter out = response.getWriter();
-            out.println("<table>");
-            for (int i = 0; i < list.size(); i++) {
-                Product pr = list.get(i);
-                out.println("<td>");
-                out.println("<div class=\"show-product-box\">");
-                out.println("<h3>" + pr.getName() + "</h3>");
-                out.println("<img src=\"/img/" + pr.getImage() + "\">");
-                out.println("<p style=\"font-weight: 700;\">" + pr.getCategoryID() + "</p>");
-                out.println("<p class=\"price\">" + pr.getPrice() + "</p>");
-                out.println("<div class=\"show-product-box-btn\">");
-                out.println("<a href=\"#\" class=\"show-product-box-btn-buy\">Buy now</a>");
-                out.println("<a href=\"#\" class=\"show-product-box-btn-add\" >Add to cart</a>");
-                out.println("</div>");
-                out.println("</div>");
-                out.println("</td>");
-                if ((i + 1) % 3 == 0 || i == list.size() - 1) {
-                    out.println("</tr>");
+            categories = ctf.select();
+            products = pf.getListPrByName(keyword);
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(keyword);
+
+        int count = 0;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table>");
+        for (Product product : products) {
+            if (count % 3 == 0) {
+                sb.append("<tr>");
+            }
+            sb.append("<td>");
+            sb.append("<div class=\"show-product-box\">");
+            sb.append("<h3>").append(product.getName()).append("</h3>");
+            sb.append("<img src=\"").append(request.getContextPath()).append("/img/").append(product.getImage()).append("\" height=\"300\" width=\"300\" />");
+            sb.append("<br />");
+            for (Category category : categories) {
+                if (category.getId() == product.getCategoryID()) {
+                    sb.append("<p style=\"font-weight: 700;\">").append(category.getName()).append("</p>");
+                    break;
                 }
             }
-            out.println("</table>");
-
-        } catch (SQLException ex) {
-            Logger.getLogger(SearchServlet.class.getName()).log(Level.SEVERE, null, ex);
+            sb.append("<p class=\"price\">").append(product.getPrice()).append("$").append("</p>");
+            sb.append("<div class=\"show-product-box-btn\">");
+            sb.append("<a href=\"").append(request.getContextPath()).append("/order/buynow.do?id=").append(product.getId()).append("\" class=\"show-product-box-btn-buy\">Buy now</a>");
+            sb.append("<a href=\"").append(request.getContextPath()).append("/order/add2cart.do?id=").append(product.getId()).append("\" class=\"show-product-box-btn-add\">Add to cart</a>");
+            sb.append("</div>");
+            sb.append("</div>");
+            sb.append("</td>");
+            count++;
+            if (count % 3 == 0 || count == products.size()) {
+                sb.append("</tr>");
+            }
         }
+        sb.append("</table>");
+
+        response.setContentType("text/html");
+        response.getWriter().write(sb.toString());
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

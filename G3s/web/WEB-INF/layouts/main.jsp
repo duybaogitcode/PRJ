@@ -28,9 +28,17 @@
                 <div class="header-left">
 
                     <i><ion-icon name="contact"></ion-icon></i>
-                    <a href="<c:url value ="/user/joinnow.do" />"class="btn-header-left">Join Now</a>
-                    <span>/</span>
-                    <a href="<c:url value ="/user/signin.do" />" class="btn-header-left"">Sign in</a> 
+                            <c:choose>
+                                <c:when test="${sessionScope.account==null}">
+                            <a href="<c:url value ="/user/joinnow.do" />"class="btn-header-left">Join Now</a>
+                            <span>/</span>
+                            <a href="<c:url value ="/user/signin.do" />" class="btn-header-left">Sign in</a> 
+                        </c:when>
+                        <c:otherwise>
+                            ${sessionScope.account.name} |
+                            <a href="<c:url value ="/user/logout.do" />" class="btn-header-left">Log out</a> 
+                        </c:otherwise>
+                    </c:choose>
 
                 </div>
 
@@ -65,10 +73,34 @@
                 </div>
 
                 <div class="icons">
-                    <a href="<c:url value="/cart/index.do"/>" <i><ion-icon name="cart"></ion-icon></i> </a> 
+                    <i style="font-size: 30px;"><ion-icon name="search"></ion-icon></i>
+                    <input type="text" id="searchInput" />
+                    <a href="<c:url value="/order/cart.do"/>"<i style="font-size: 30px;"><ion-icon name="cart"></ion-icon></i></a>(${sessionScope.totalQuantity})
+
+
                 </div>
 
             </div>
+
+
+            <script>
+                var searchInput = document.getElementById("searchInput");
+                var searchResults = document.getElementById("searchResults");
+
+
+                searchInput.addEventListener("input", function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var table = document.getElementById("show-product-table");
+                            table.innerHTML = xhr.responseText;
+                        }
+                    };
+                    xhr.open("GET", "/g3s/search?keyword=" + searchInput.value);
+                    xhr.send();
+                });
+
+            </script>
 
 
             <div class="row navigation">

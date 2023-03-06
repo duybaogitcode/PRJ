@@ -17,10 +17,32 @@ public class Account {
     private String phone;
     private String email;
     private String password;
+    private boolean enable;
     private String role;
 
     public Account() {
     }
+
+    public Account(int id, String name, String address, String phone, String email, String password, boolean enable, String role) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.enable = enable;
+        this.role = role;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+    
+    
 
     public int getId() {
         return id;

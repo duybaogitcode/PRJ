@@ -40,6 +40,14 @@ public class Cart {
             }
         }
     }
+    
+    public int getTotalQuantity() {
+    int total = 0;
+    for (Item item : map.values()) {
+        total += item.getQuantity();
+    }
+    return total;
+}
 
     public void update(int id, int quantity) {
         Item item = map.get(id);
