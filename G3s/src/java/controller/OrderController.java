@@ -198,31 +198,39 @@ public class OrderController extends HttpServlet {
         orderdetailFacade odf = new orderdetailFacade();
         orderheaderFacade ohf = new orderheaderFacade();
 
-        //Lay cart tu session
+       //Lay cart tu session
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null || op != null) {
-            //Neu trong session chua co cart thi tao moi
+        if (op != null) {
+            //case buynow
             cart = new Cart();
             Item item = (Item) session.getAttribute("item");
             cart.add(item);
-            session.setAttribute("pay", cart);
+            request.setAttribute("op", op);
         }
 
-        //Luu thong tin don hang(uncomplete)
+        //Tao don hang
+        Account acc = (Account) session.getAttribute("account");
+        OrderHeader oh = new OrderHeader("On-going", acc.getId());
+        //Luu thong tin don hang
+        ohf.create(oh);
+        List ohl = ohf.select();
+        oh = (OrderHeader) ohl.get(ohl.size() - 1);
         for (int key : cart.getMap().keySet()) {
             Item item = cart.getMap().get(key);
-            orderheader oh = new orderheader(1, new Date(), "ongoing", 2);
-            orderdetail od = new orderdetail(1,
-                    oh.getId(),
+            OrderDetail od = new OrderDetail(oh.getId(),
                     item.getProduct().getId(),
                     item.getQuantity(),
                     item.getProduct().getPrice(),
                     item.getProduct().getDiscount());
-//            ohf.create(oh);
-//            odf.create(od);
+
+            odf.create(od);
         }
+
         request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+        if (op == null) {
+            session.setAttribute("cart", null);
+        }
     }
 
     protected boolean check_login(HttpServletRequest request, HttpServletResponse response)
