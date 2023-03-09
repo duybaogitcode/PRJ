@@ -75,7 +75,7 @@
                 <div class="icons">
                     <i style="font-size: 30px;"><ion-icon name="search"></ion-icon></i>
                     <input type="text" id="searchInput" />
-                    <a href="<c:url value="/order/cart.do"/>"<i style="font-size: 30px;"><ion-icon name="cart"></ion-icon></i></a>(${sessionScope.totalQuantity})
+                    <a href="<c:url value="/order/cart.do"/>"<i style="font-size: 30px;"><ion-icon name="cart"></ion-icon></i></a>()
 
 
                 </div>

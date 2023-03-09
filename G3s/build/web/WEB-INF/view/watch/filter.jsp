@@ -155,7 +155,7 @@
     </c:if>
 
 
-        <div id="show-product-table">
+    <div id="show-product-table">
         <c:if test="${not empty listPaging}">
 
 
@@ -190,9 +190,11 @@
                 </c:forEach>
             </table>
 
+            <hr/>
+
             <div class="index">
                 <c:forEach begin="1" end="${endPage}" var="i">
-                    <c:url var="url" value="/watch/${link}.do">     
+                    <c:url var="url" value="/watch/filter.do">     
                         <c:param name="index" value="${i}"/>
                         <c:forEach var="categoryId" items="${categoryIds}" varStatus="status">
                             <c:param name="category" value="${categoryId}" />

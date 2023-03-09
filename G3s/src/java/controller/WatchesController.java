@@ -42,9 +42,6 @@ public class WatchesController extends HttpServlet {
         String action = (String) request.getAttribute("action");
         getListCate(request, response);
         switch (action) {
-            case "index":
-                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
-                break;
             case "filter":
                 HttpSession session = request.getSession();
                 session.setAttribute("urlParam", request.getQueryString());
@@ -57,7 +54,7 @@ public class WatchesController extends HttpServlet {
         }
 
     }
-
+//
 //    protected void showAll(HttpServletRequest request, HttpServletResponse response)
 //            throws ServletException, IOException {
 //        String indexPage = request.getParameter("index");
@@ -79,7 +76,7 @@ public class WatchesController extends HttpServlet {
 //            request.setAttribute("listPaging", listPaging);
 //            request.setAttribute("endPage", endPage);
 //            request.setAttribute("link", "watches");
-//            request.getRequestDispatcher("/watch/index.do").forward(request, response);
+//            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
 //        } catch (SQLException ex) {
 //            //Show the error page
 //            request.setAttribute("message", ex.getMessage());
@@ -88,6 +85,11 @@ public class WatchesController extends HttpServlet {
 //            request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
 //        }
 //    }
+    protected void index(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+    }
+
     protected void getListCate(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CategoryFacade cf = new CategoryFacade();
@@ -119,7 +121,6 @@ public class WatchesController extends HttpServlet {
             int index = Integer.parseInt(indexPage);
             ProductFacade pf = new ProductFacade();
             int numPage = pf.getTotalProduct(categoryIds, minPrice, maxPrice);
-            System.out.println("Numpage : " + numPage);
             int endPage = numPage / 6;
             System.out.println(endPage);
             if (numPage % 6 != 0) {
@@ -129,11 +130,11 @@ public class WatchesController extends HttpServlet {
             List<Product> listPaging = pf.pagingProduct(index, categoryIds, minPrice, maxPrice);
             request.setAttribute("listPaging", listPaging);
             request.setAttribute("endPage", endPage);
-            request.setAttribute("link", "filter");
             request.setAttribute("minPrice", minPrice);
             request.setAttribute("maxPrice", maxPrice);
             request.setAttribute("categoryIds", categoryIds);
-            request.getRequestDispatcher("/watch/index.do").forward(request, response);
+            request.setAttribute("currentPage", indexPage);
+             request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         } catch (SQLException ex) {
             //Show the error page
             request.setAttribute("message", ex.getMessage());
