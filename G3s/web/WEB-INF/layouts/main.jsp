@@ -17,7 +17,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+        <script type="module" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule="" src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons/ionicons.js"></script>
         <title>JSP Page</title>
     </head>
     <body>
@@ -27,9 +28,17 @@
                 <div class="header-left">
 
                     <i><ion-icon name="contact"></ion-icon></i>
-                    <a href="<c:url value ="/user/joinnow.do" />"class="btn-header-left">Join Now</a>
-                    <span>/</span>
-                    <a href="<c:url value ="/user/signin.do" />" class="btn-header-left"">Sign in</a> 
+                            <c:choose>
+                                <c:when test="${sessionScope.account==null}">
+                            <a href="<c:url value ="/user/signup.do" />"class="btn-header-left">Sign up</a>
+                            <span>/</span>
+                            <a href="<c:url value ="/user/signin.do" />" class="btn-header-left">Sign in</a> 
+                        </c:when>
+                        <c:otherwise>
+                            ${sessionScope.account.name} |
+                            <a href="<c:url value ="/user/logout.do" />" class="btn-header-left">Log out</a> 
+                        </c:otherwise>
+                    </c:choose>
 
                 </div>
 
@@ -64,13 +73,34 @@
                 </div>
 
                 <div class="icons">
+                    <i style="font-size: 30px;"><ion-icon name="search"></ion-icon></i>
+                    <input type="text" id="searchInput" />
+                    <a href="<c:url value="/order/cart.do"/>"<i style="font-size: 30px;"><ion-icon name="cart"></ion-icon></i></a>(${sessionScope.totalQuantity})
 
-                    <i><ion-icon name="search"></ion-icon></i>
-                    <i><ion-icon name="cart"></ion-icon></i>
 
                 </div>
 
             </div>
+
+
+            <script>
+                var searchInput = document.getElementById("searchInput");
+                var searchResults = document.getElementById("searchResults");
+
+
+                searchInput.addEventListener("input", function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var table = document.getElementById("show-product-table");
+                            table.innerHTML = xhr.responseText;
+                        }
+                    };
+                    xhr.open("GET", "/g3s/search?keyword=" + searchInput.value);
+                    xhr.send();
+                });
+
+            </script>
 
 
             <div class="row navigation">
@@ -80,7 +110,7 @@
                             <a class="nav-link" href="<c:url value ="/home/index.do" />"><ion-icon name="home"></ion-icon> Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<c:url value ="/watch/index.do" />"><ion-icon name="watch"></ion-icon> Watches</a>
+                            <a class="nav-link" href="<c:url value ="/watch/filter.do" />"><ion-icon name="watch"></ion-icon> Watches</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/g3s/#trending"><ion-icon name="trending-up"></ion-icon> Trending</a>

@@ -5,12 +5,11 @@
  */
 package controller;
 
-import dal.accountFacade;
-import dal.productFacade;
+import dal.AccountFacade;
+import dal.ProductFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,8 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import model.account;
-import model.product;
+import model.Account;
+import model.Product;
 
 /**
  *
@@ -48,37 +47,85 @@ public class UserController extends HttpServlet {
             case "signin":
                 //Processing code here
                 //Foward request & respone to view
-                System.out.println("test ne bao1");
-
-                accountFacade af = new accountFacade();
-                 {
-                    try {
-                        List<account> list = af.select();
-                        System.out.println(list);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
 
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             case "signin_handler":
-                request.getRequestDispatcher("/admin/index.do").forward(request, response);
+                signin_handler(request, response);
                 break;
-            case "joinnow":
+            case "admin":
+                admin(request, response);
+                break;
+            case "signup":
                 //Processing code here
                 //Foward request & respone to view
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
-            case "joinnow_handler":
-                joinnow_handler(request, response);
+            case "signup_handler":
+                signup_handler(request, response);
+                break;
+            case "logout":
+                logout(request, response);
                 break;
             default:
-
+                //Show error page
+                request.setAttribute("Message", "Invalid");
         }
     }
 
-    protected void joinnow_handler(HttpServletRequest request, HttpServletResponse response)
+    protected void signin_handler(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            String emailOrPhone = request.getParameter("emailOrPhone");
+            String password = request.getParameter("password");
+            //Kiem tra thong trong DB
+            AccountFacade af = new AccountFacade();
+            Account acc = af.signin(emailOrPhone, password);
+            if (acc == null) {
+                //Neu login khong thanh cong thi quay ve login form 
+                //de nhap lai thong tin
+                request.setAttribute("message", "Incorrect email or password.");
+                request.getRequestDispatcher("/user/signin.do").forward(request, response);
+            } else {
+                //Neu login thanh cong
+                //Luu account vao session
+                HttpSession session = request.getSession();
+                session.setAttribute("account", acc);
+                session.setAttribute("role", acc.getRole());
+                if (acc.getRole().equals("ROLE_ADMIN")) {
+                    //forward to admin page
+                    response.sendRedirect(request.getContextPath() + "/admin_account/index.do");
+                } else {
+                    //Quay ve Home Page
+                    response.sendRedirect(request.getContextPath() + "/home/index.do");
+                }
+            }
+        } catch (Exception ex) {
+            request.setAttribute("message", ex.toString());
+            request.getRequestDispatcher("/user/signin.do").forward(request, response);
+        }
+    }
+
+    protected void logout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //Xoa session
+        HttpSession session = request.getSession();
+        session.invalidate();
+        //Quay ve trang chu
+        response.sendRedirect(request.getContextPath() + "/home/index.do");
+    }
+
+    protected void admin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("role") == null) {
+            request.getRequestDispatcher("/user/signin.do").forward(request, response);
+        } else if (!session.getAttribute("role").equals("ROLE_ADMIN")) {
+            response.sendRedirect(request.getContextPath() + "/home/index.do");
+        }
+    }
+
+    protected void signup_handler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             //Lay thong tin register
@@ -90,7 +137,7 @@ public class UserController extends HttpServlet {
             String passConfirm = request.getParameter("passConfirm");
 
             //Tao doi tuong account
-            account acc = new account();
+            Account acc = new Account();
             acc.setName(username);
             acc.setAddress(address);
             acc.setPhone(tel);
@@ -99,7 +146,7 @@ public class UserController extends HttpServlet {
             acc.setEnable(true);
             acc.setRole("ROLE_CUSTOMER");
             request.setAttribute("acc", acc);
-            accountFacade af = new accountFacade();
+            AccountFacade af = new AccountFacade();
             int doneCheck = 0;
 
             //Username check
@@ -111,7 +158,7 @@ public class UserController extends HttpServlet {
             //Email check
             if (email == null || email.equals("")) {
                 request.setAttribute("messageEmail", "Email must not be blank.");
-            } else if (af.read(email) != null) {
+            } else if (af.read_1(email) != null) {
                 request.setAttribute("messageEmail", "Email is existed.");
             } else {
                 doneCheck++;
@@ -151,10 +198,10 @@ public class UserController extends HttpServlet {
             //Create new account
             if (doneCheck == 6) {
                 af.create(acc);
-                request.setAttribute("messageDone", "Done");
+                request.setAttribute("messageDone", "Sign up success. Please Sign in.");
             }
 
-            request.getRequestDispatcher("/user/joinnow.do").forward(request, response);
+            request.getRequestDispatcher("/user/signup.do").forward(request, response);
 
         } catch (SQLException ex) {
         }

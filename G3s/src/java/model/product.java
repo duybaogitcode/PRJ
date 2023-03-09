@@ -11,7 +11,7 @@ import java.util.Locale.Category;
  *
  * @author duyba
  */
-public class product {
+public class Product {
 
     private int id;
     private String name;
@@ -21,10 +21,10 @@ public class product {
     private float discount;
     private String categoryID;
 
-    public product() {
+    public Product() {
     }
 
-    public product(int id, String name, String image, String description, float price, float discount, String categoryID) {
+    public Product(int id, String name, String image, String description, float price, float discount, String categoryID) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -90,4 +90,10 @@ public class product {
         this.categoryID = categoryID;
     }
 
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", image=" + image + ", description=" + description + ", price=" + price + ", discount=" + discount + ", categoryID=" + categoryID + '}';
+    }
+
+    
 }

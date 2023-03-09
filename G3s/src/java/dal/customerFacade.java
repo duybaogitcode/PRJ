@@ -12,16 +12,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.customer;
+import model.Customer;
 
 /**
  *
  * @author admin
  */
-public class customerFacade {
+public class CustomerFacade {
 
-    public List<customer> select() throws SQLException {
-        List<customer> list = null;
+    public List<Customer> select() throws SQLException {
+        List<Customer> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -31,7 +31,7 @@ public class customerFacade {
         list = new ArrayList<>();
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
-            customer cus = new customer();
+            Customer cus = new Customer();
             cus.setId(rs.getInt("id"));
             cus.setCatagory(rs.getString("catagory"));
             cus.setShipToAddress(rs.getString("shipToAddress"));
@@ -42,7 +42,7 @@ public class customerFacade {
         return list;
     }
 
-    public void create(customer cus) throws SQLException {
+    public void create(Customer cus) throws SQLException {
         Connection con = DBContext.getConnection();
         PreparedStatement stm = con.prepareStatement("insert Customer values(?,?,?)");
         stm.setInt(1, cus.getId());
@@ -52,8 +52,8 @@ public class customerFacade {
         con.close();
     }
 
-    public customer read(String id) throws SQLException {
-        customer cus = null;
+    public Customer read(String id) throws SQLException {
+        Customer cus = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng PreparedStatement
@@ -62,7 +62,7 @@ public class customerFacade {
         stm.setString(1, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
-            cus = new customer();
+            cus = new Customer();
             cus.setId(rs.getInt("id"));
             cus.setCatagory(rs.getString("catagory"));
             cus.setShipToAddress("shipToAddress");
@@ -71,7 +71,7 @@ public class customerFacade {
         return cus;
     }
 
-    public void update(customer cus) throws SQLException {
+    public void update(Customer cus) throws SQLException {
         Connection con = DBContext.getConnection();
         PreparedStatement stm = con.prepareStatement("update Customer set catagory = ?, shipToAddress = ? where id = ?");
         stm.setString(1, cus.getCatagory());

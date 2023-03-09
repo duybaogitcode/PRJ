@@ -11,16 +11,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.category;
+import model.Category;
 
 /**
  *
  * @author duyba
  */
-public class categoryFacade {
+public class CategoryFacade {
 
-    public List<category> select() throws SQLException {
-        List<category> list = null;
+    public List<Category> select() throws SQLException {
+        List<Category> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -30,8 +30,8 @@ public class categoryFacade {
         list = new ArrayList<>();
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
-            category cate = new category();
-            cate.setId(rs.getInt("id"));
+            Category cate = new Category();
+            cate.setId(rs.getString("id"));
             cate.setName(rs.getString("name"));
             //Them cate vao list
             list.add(cate);

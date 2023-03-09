@@ -10,24 +10,25 @@
 
 <div class="container col-sm-3 mt-5">
     <h1>Sign in</h1>
-    <form action="<c:url value="/user/signin_handler.do" />">
+   <form action="<c:url value="/user/signin_handler.do" />" method="get">
         <div class="form_details">
             <div class="form-control form-control-signin">
-                <input type="text" id="emailOrPhone" placeholder="Email address or phone number" />
+                 <input type="text" id="emailOrPhone" name="emailOrPhone"placeholder="Email address or phone number" />
                 <span></span>
                 <small></small>
             </div>
             <div class="form-control form-control-signin">
-                <input type="password" id="password" placeholder="Password" />
+                <input type="password" id="password" name="password" placeholder="Password" />
                 <i class="fa-regular fa-eye-slash" id="togglePassword1"></i>
                 <span></span>
                 <small></small>
             </div>
         </div>
+        <i style="color:red;">${message}</i>
         <!-- </div> -->
         <div class="form_footer">
             <input type="submit" value="Sign in" />
-            <div class="signup_link">Already on G3S ? <a href="<c:url value ="/user/signin.do" />">Sign in</a></div>
+            <div class="signup_link">New member? <a href="<c:url value ="/user/signup.do" />">Sign up</a> here</div>
         </div>
     </form>
 </div>

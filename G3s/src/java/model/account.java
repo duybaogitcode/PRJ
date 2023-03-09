@@ -9,7 +9,7 @@ package model;
  *
  * @author admin
  */
-public class account {
+public class Account {
 
     private int id;
     private String name;
@@ -20,8 +20,29 @@ public class account {
     private boolean enable;
     private String role;
 
-    public account() {
+    public Account() {
     }
+
+    public Account(int id, String name, String address, String phone, String email, String password, boolean enable, String role) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.enable = enable;
+        this.role = role;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -71,14 +92,6 @@ public class account {
         this.password = password;
     }
 
-    public boolean isEnable() {
-        return enable;
-    }
-
-    public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
     public String getRole() {
         return role;
     }
@@ -89,7 +102,10 @@ public class account {
 
     @Override
     public String toString() {
-        return name + address + email;
+        return name + address + email ;
     }
-
+    
+    
+    
+    
 }

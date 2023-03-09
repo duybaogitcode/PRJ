@@ -40,6 +40,7 @@ public class HomeController extends HttpServlet {
             case "index":
                 //Processing code here
                 //Foward request & respone to view
+                System.out.println("aaa");
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             case "aboutus":

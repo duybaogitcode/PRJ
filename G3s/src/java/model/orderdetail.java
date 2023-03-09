@@ -9,7 +9,7 @@ package model;
  *
  * @author admin
  */
-public class orderdetail {
+public class OrderDetail {
     private int id;
     private int orderHeaderId;
     private int productId;
@@ -17,10 +17,10 @@ public class orderdetail {
     private float price;
     private float discount;
 
-    public orderdetail() {
+    public OrderDetail() {
     }
 
-    public orderdetail(int id, int orderHeaderId, int productId, int quantity, float price, float discount) {
+    public OrderDetail(int id, int orderHeaderId, int productId, int quantity, float price, float discount) {
         this.id = id;
         this.orderHeaderId = orderHeaderId;
         this.productId = productId;
