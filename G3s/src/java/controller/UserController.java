@@ -6,9 +6,7 @@
 package controller;
 
 import dal.accountFacade;
-import dal.productFacade;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,8 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.account;
-import model.Product;
+import model.Account;
 
 /**
  *
@@ -51,7 +48,7 @@ public class UserController extends HttpServlet {
                 accountFacade af = new accountFacade();
                  {
                     try {
-                        List<account> list = af.select();
+                        List<Account> list = af.select();
                         System.out.println(list);
                     } catch (SQLException ex) {
                         Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);

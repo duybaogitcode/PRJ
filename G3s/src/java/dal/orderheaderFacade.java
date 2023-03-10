@@ -10,11 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import model.customer;
-import model.orderheader;
+import model.OrderHeader;
 
 /**
  *
@@ -22,8 +22,8 @@ import model.orderheader;
  */
 public class orderheaderFacade {
 
-    public List<orderheader> select() throws SQLException {
-        List<orderheader> list = null;
+    public List<OrderHeader> select() throws SQLException {
+        List<OrderHeader> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
@@ -33,9 +33,9 @@ public class orderheaderFacade {
         list = new ArrayList<>();
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
-            orderheader orh = new orderheader();
+            OrderHeader orh = new OrderHeader();
             orh.setId(rs.getInt("id"));
-            orh.setDate(rs.getDate("date"));
+            orh.setDate(rs.getTimestamp("date"));
             orh.setStatus(rs.getString("status"));
             orh.setCustomerId(rs.getInt("customerId"));
             //Them cate vao list
@@ -45,20 +45,20 @@ public class orderheaderFacade {
         return list;
     }
 
-    public void create(orderheader orh) throws SQLException {
+    public void create(OrderHeader orh) throws SQLException {
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("insert OrderHeader values(?,?,?,?)");
-        stm.setInt(1, orh.getId());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        stm.setString(2, sdf.format(orh.getDate()));
-        stm.setString(3, orh.getStatus());
-        stm.setInt(4, orh.getCustomerId());
+        PreparedStatement stm = con.prepareStatement("insert OrderHeader values(?,?,?)");
+        Calendar cal = Calendar.getInstance();
+        Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
+        stm.setTimestamp(1, timestamp);
+        stm.setString(2, orh.getStatus());
+        stm.setInt(3, orh.getCustomerId());
         int count = stm.executeUpdate();
         con.close();
     }
 
-    public orderheader read(String id) throws SQLException {
-        orderheader orh = null;
+    public OrderHeader read(String id) throws SQLException {
+        OrderHeader orh = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng PreparedStatement
@@ -67,9 +67,9 @@ public class orderheaderFacade {
         stm.setString(1, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
-            orh = new orderheader();
+            orh = new OrderHeader();
             orh.setId(rs.getInt("id"));
-            orh.setDate(rs.getDate("date"));
+            orh.setDate(rs.getTimestamp("date"));
             orh.setStatus(rs.getString("status"));
             orh.setCustomerId(rs.getInt("customerId"));
         }
@@ -77,14 +77,12 @@ public class orderheaderFacade {
         return orh;
     }
 
-    public void update(orderheader orh) throws SQLException {
+    public void update(OrderHeader orh) throws SQLException {
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("update OrderHeader set date = ?, status = ?, customerId = ? where id = ?");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        stm.setString(1, sdf.format(orh.getDate()));
-        stm.setString(2, orh.getStatus());
-        stm.setInt(3, orh.getCustomerId());
-        stm.setInt(4, orh.getId());
+        PreparedStatement stm = con.prepareStatement("update OrderHeader set status = ?, customerId = ? where id = ?");
+        stm.setString(1, orh.getStatus());
+        stm.setInt(2, orh.getCustomerId());
+        stm.setInt(3, orh.getId());
         int count = stm.executeUpdate();
         con.close();
     }
@@ -94,7 +92,7 @@ public class orderheaderFacade {
         // Prepare -> thay đổi dữ liệu
         PreparedStatement stm = con.prepareStatement("delete from OrderHeader where id = ?");
         stm.setString(1, id);
-        int count = stm.executeUpdate();
+        stm.executeUpdate();
         con.close();
     }
 }

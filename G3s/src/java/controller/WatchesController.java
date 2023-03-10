@@ -5,7 +5,7 @@
  */
 package controller;
 
-import dal.productFacade;
+import dal.ProductFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -46,7 +46,7 @@ public class WatchesController extends HttpServlet {
         int index = Integer.parseInt(indexPage);
         System.out.println(index);
         try {
-            productFacade pf = new productFacade();
+            ProductFacade pf = new ProductFacade();
             List<Product> list = pf.select();
             int endPage = list.size() / 6;
             if (list.size() % 6 != 0) {

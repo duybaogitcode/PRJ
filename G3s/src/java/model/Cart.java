@@ -38,8 +38,14 @@ public class Cart {
             Item oldItem = map.get(id);
             if (oldItem.getQuantity() > 1) {
                 oldItem.setQuantity(oldItem.getQuantity() - item.getQuantity());
+            } else {
+                map.remove(id);
             }
         }
+    }
+
+    public int getTotalQuantity() {
+        return map.size();
     }
 
     public void update(int id, int quantity) {

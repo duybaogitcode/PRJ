@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.Cart;
 
 /**
  *
@@ -34,11 +36,16 @@ public class HomeController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String controller = (String) request.getAttribute("controller");
         String action = (String) request.getAttribute("action");
-        
-        
-        switch(action){
+
+        switch (action) {
             case "index":
                 //Processing code here
+                //Kiem tra cart va tao moi neu chua co
+                HttpSession session = request.getSession();
+                if (session.getAttribute("cart") == null) {
+                    Cart cart = new Cart();
+                    session.setAttribute("cart", cart);
+                }
                 //Foward request & respone to view
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
@@ -46,14 +53,14 @@ public class HomeController extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             default:
-                 request.setAttribute("Message", "Invalid");
+                request.setAttribute("Message", "Invalid");
                 //set view name
                 request.setAttribute("action", "error");
                 request.setAttribute("controller", "error");
                 //Foward request to layout, de trong web info thi client ko truy cap dc
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

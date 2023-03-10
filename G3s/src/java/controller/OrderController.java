@@ -7,7 +7,7 @@ package controller;
 
 import dal.orderdetailFacade;
 import dal.orderheaderFacade;
-import dal.productFacade;
+import dal.ProductFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -22,11 +22,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Account;
 import model.Cart;
 import model.Item;
-import model.orderdetail;
+import model.OrderDetail;
 import model.Product;
-import model.orderheader;
+import model.OrderHeader;
 
 /**
  *
@@ -117,6 +118,9 @@ public class OrderController extends HttpServlet {
                 case "minus":
                     if (oldQuantity > 1) {
                         item.setQuantity(oldQuantity - 1);
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/watch/filter.do");
+                        return;
                     }
                     break;
                 case "add":
@@ -126,7 +130,7 @@ public class OrderController extends HttpServlet {
         } else {
             //op = null khi request lan dau
             String id = request.getParameter("id");
-            productFacade pf = new productFacade();
+            ProductFacade pf = new ProductFacade();
             Product product = pf.read(id);
             item = new Item(product, 1);
         }
@@ -138,7 +142,7 @@ public class OrderController extends HttpServlet {
     protected void add2cart(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         String id = request.getParameter("id");
-        productFacade pf = new productFacade();
+        ProductFacade pf = new ProductFacade();
         Product product = pf.read(id);
         Item item = new Item(product, 1);
 
@@ -160,7 +164,7 @@ public class OrderController extends HttpServlet {
         String op = request.getParameter("op");
         String id = request.getParameter("id");
         HttpSession session = request.getSession();
-        productFacade pf = new productFacade();
+        ProductFacade pf = new ProductFacade();
         Product product = pf.read(id);
         Item item = new Item(product, 1);
 
@@ -198,7 +202,7 @@ public class OrderController extends HttpServlet {
         orderdetailFacade odf = new orderdetailFacade();
         orderheaderFacade ohf = new orderheaderFacade();
 
-       //Lay cart tu session
+        //Lay cart tu session
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
         if (op != null) {
