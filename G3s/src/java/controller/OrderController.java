@@ -11,7 +11,9 @@ import dal.ProductFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -20,15 +22,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Account;
 import model.Cart;
 import model.Item;
 import model.OrderDetail;
-import model.OrderHeader;
 import model.Product;
+import model.OrderHeader;
 
 /**
  *
- * @author duyba
+ * @author giahu
  */
 @WebServlet(name = "OrderController", urlPatterns = {"/order"})
 public class OrderController extends HttpServlet {
@@ -44,11 +47,12 @@ public class OrderController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+
         String controller = (String) request.getAttribute("controller");
         String action = (String) request.getAttribute("action");
 
         switch (action) {
-
             case "buynow":
                 //Processing code here
                 try {
@@ -114,6 +118,9 @@ public class OrderController extends HttpServlet {
                 case "minus":
                     if (oldQuantity > 1) {
                         item.setQuantity(oldQuantity - 1);
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/watch/filter.do");
+                        return;
                     }
                     break;
                 case "add":
@@ -148,10 +155,9 @@ public class OrderController extends HttpServlet {
             session.setAttribute("cart", cart);
         }
         cart.add(item);
-
         String urlParam = (String) session.getAttribute("urlParam");
-
-        response.sendRedirect(request.getContextPath() + "/watch/filter.do?" + urlParam + "#" + id);
+        
+        response.sendRedirect(request.getContextPath() + urlParam + "#" + id);
     }
 
     protected void cart(HttpServletRequest request, HttpServletResponse response)
@@ -187,6 +193,7 @@ public class OrderController extends HttpServlet {
                     break;
             }
         }
+
         request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
     }
 
@@ -199,30 +206,36 @@ public class OrderController extends HttpServlet {
         //Lay cart tu session
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null || op != null) {
-            //Neu trong session chua co cart thi tao moi
+        if (op != null) {
+            //case buynow
             cart = new Cart();
             Item item = (Item) session.getAttribute("item");
             cart.add(item);
-            session.setAttribute("pay", cart);
+            request.setAttribute("op", op);
         }
 
-
-        //Luu thong tin don hang(uncomplete)
+        //Tao don hang
+        Account acc = (Account) session.getAttribute("account");
+        OrderHeader oh = new OrderHeader("On-going", acc.getId());
+        //Luu thong tin don hang
+        ohf.create(oh);
+        List ohl = ohf.select();
+        oh = (OrderHeader) ohl.get(ohl.size() - 1);
         for (int key : cart.getMap().keySet()) {
             Item item = cart.getMap().get(key);
-            OrderHeader oh = new OrderHeader(1, new Date(), "ongoing", 2);
-            OrderDetail od = new OrderDetail(1,
-                    oh.getId(),
+            OrderDetail od = new OrderDetail(oh.getId(),
                     item.getProduct().getId(),
                     item.getQuantity(),
                     item.getProduct().getPrice(),
                     item.getProduct().getDiscount());
-//            ohf.create(oh);
-//            odf.create(od);
+
+            odf.create(od);
         }
 
         request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
+        if (op == null) {
+            session.setAttribute("cart", null);
+        }
     }
 
     protected boolean check_login(HttpServletRequest request, HttpServletResponse response)

@@ -10,7 +10,6 @@ package model;
  * @author admin
  */
 public class OrderDetail {
-    private int id;
     private int orderHeaderId;
     private int productId;
     private int quantity;
@@ -20,21 +19,12 @@ public class OrderDetail {
     public OrderDetail() {
     }
 
-    public OrderDetail(int id, int orderHeaderId, int productId, int quantity, float price, float discount) {
-        this.id = id;
+    public OrderDetail(int orderHeaderId, int productId, int quantity, float price, float discount) {
         this.orderHeaderId = orderHeaderId;
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
         this.discount = discount;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getOrderHeaderId() {

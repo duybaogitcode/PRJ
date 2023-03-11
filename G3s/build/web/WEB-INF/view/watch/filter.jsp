@@ -37,20 +37,19 @@
                     <input type="checkbox" id="category" name="category" value="${category.id}" ${checked}>${category.name}<br>
                 </c:forEach>
 
-                <h5>Sort By Price</h5>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sort" id="sort-price-asc" value="price_asc">
-                    <label class="form-check-label" for="sort-price-asc">
-                        Price: Low to High
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sort" id="sort-price-desc" value="price_desc">
-                    <label class="form-check-label" for="sort-price-desc">
-                        Price: High to Low
-                    </label>
+                    <br/>
+                <div class="sort">
+                    <h5>Sort By</h5>
+                    <select name="sort">
+                        <option value="none" ${sort == "none" ? "selected":""}>None</option>
+                        <option value="htl" ${sort == "htl" ? "selected":""}>Price High to low</option>
+                        <option value="lth" ${sort == "lth" ? "selected":""}>Price Low to high</option>
+                        <option value="naz" ${sort == "naz" ? "selected":""}>Name A-Z</option>
+                        <option value="nza" ${sort == "naz" ? "selected":""}>Name Z-A</option>
+                    </select>
                 </div>
             </div>
+                <br/>
 
             <h5>Price Range</h5>
             <p>User slider or enter min and max price</p>
@@ -201,6 +200,7 @@
                         </c:forEach>   
                         <c:param name="min" value="${minPrice}"/>
                         <c:param name="max" value="${maxPrice}"/>
+                        <c:param name="sort" value="${sort}" />
                     </c:url>
                     <a class="page-index" href="${url}">${i}</a>
                 </c:forEach>

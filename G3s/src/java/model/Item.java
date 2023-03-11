@@ -40,6 +40,6 @@ public class Item {
 
     //Dinh nghia property cost
     public double getCost() {
-        return this.product.getPrice() * this.product.getDiscount() * this.quantity;
+        return this.product.getPrice() - this.product.getPrice() * this.product.getDiscount() * this.quantity;
     }
 }

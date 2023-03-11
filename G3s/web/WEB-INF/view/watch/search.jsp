@@ -149,17 +149,17 @@
     </div>
     <hr>
 
-    <c:if test="${empty listPaging}">
+    <c:if test="${empty listSearchPaging}">
         <img src="<c:url value="/img/no-product-found.png" />" style="display: block; margin: 0 auto; width: 50%;">
     </c:if>
 
 
     <div id="show-product-table">
-        <c:if test="${not empty listPaging}">
+        <c:if test="${not empty listSearchPaging}">
 
 
             <table>
-                <c:forEach var="product" items="${listPaging}" varStatus="loop">
+                <c:forEach var="product" items="${listSearchPaging}" varStatus="loop">
 
                     <c:if test="${loop.index % 3 == 0}">
                         <tr>
@@ -193,14 +193,9 @@
 
             <div class="index">
                 <c:forEach begin="1" end="${endPage}" var="i">
-                    <c:url var="url" value="/watch/filter.do">     
+                    <c:url var="url" value="/watch/search.do">     
                         <c:param name="index" value="${i}"/>
-                        <c:forEach var="categoryId" items="${categoryIds}" varStatus="status">
-                            <c:param name="category" value="${categoryId}" />
-                        </c:forEach>   
-                        <c:param name="min" value="${minPrice}"/>
-                        <c:param name="max" value="${maxPrice}"/>
-                        <c:param name="sort" value="${sort}" />
+                        <c:param name="keyword" value="${keyword}"/>
                     </c:url>
                     <a class="page-index" href="${url}">${i}</a>
                 </c:forEach>

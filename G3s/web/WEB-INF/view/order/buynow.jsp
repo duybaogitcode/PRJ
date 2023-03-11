@@ -13,7 +13,7 @@
         <th>Product</th>
         <th>Quantity</th>
         <th>Price</th>
-        <th>Subtotal</th>
+        <th>Cost</th>
     </tr>
     <c:set var="total" value="0"></c:set>
     <c:set var="total" value="${total + item.cost}"></c:set>
@@ -30,14 +30,14 @@
                 <button type="submit" name="op" value="add">+</button>
             </form>
         </td>
-        <td>${item.product.price}</td>
-        <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${item.cost}"/></td>
+        <td>$${item.product.price}</td>
+        <td>$<fmt:formatNumber type="number" maxFractionDigits="2" value="${item.cost}"/></td>
     </tr>
     <tr>
         <td colspan="3" align="left">Total</td>
-        <td><fmt:formatNumber type="number" maxFractionDigits="2" value="${total}"/></td>
+        <td>$<fmt:formatNumber type="number" maxFractionDigits="2" value="${total}"/></td>
     </tr>
 </table>
 <br>
 <a href="<c:url value ="/order/pay.do?op=buynow" />">Order</a>
-<a href="<c:url value ="/watch/index.do" />">Continue Shopping</a>
+<a href="<c:url value ="/watch/filter.do" />">Continue Shopping</a>

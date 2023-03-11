@@ -57,27 +57,18 @@ public class ProductFacade {
         return 0;
     }
 
-    public List<Product> getListPrByName(String name) throws SQLException {
-        List<Product> list = null;
+    public int getTotalProduct(String name) throws SQLException {
         Connection con = DBContext.getConnection();
         String query = "%" + name + "%";
-        PreparedStatement stm = con.prepareStatement("select * from product where name like ?");
+        PreparedStatement stm = con.prepareStatement("select count(*) as numOfProduct from product where name like ?");
         stm.setString(1, query);
         ResultSet rs = stm.executeQuery();
-        list = new ArrayList<>();
+
         while (rs.next()) {
-            Product pr = new Product();
-            pr.setId(rs.getInt("id"));
-            pr.setName(rs.getString("name"));
-            pr.setDescription(rs.getNString("description"));
-            pr.setImage(rs.getString("image"));
-            pr.setPrice(rs.getFloat("price"));
-            pr.setDiscount(rs.getFloat("discount"));
-            pr.setCategoryID(rs.getString("categoryId"));
-            list.add(pr);;
+            return rs.getInt("numOfProduct");
         }
         con.close();
-        return list;
+        return 0;
     }
 
     public int getTotalProduct(String[] categoryIds, String minPrice, String maxPrice) throws SQLException {
@@ -173,6 +164,8 @@ public class ProductFacade {
         if (maxPrice != null && !maxPrice.isEmpty()) {
             query = query + " AND price <= " + maxPrice;
         }
+        
+
         System.out.println(query);
         ResultSet rs = stm.executeQuery(query);
         list = new ArrayList<>();
@@ -193,12 +186,13 @@ public class ProductFacade {
         return list;
     }
 
-    public List<Product> pagingProduct(int index, String[] categoryIds, String minPrice, String maxPrice) throws SQLException {
+    public List<Product> pagingProduct(int index, String[] categoryIds, String minPrice, String maxPrice, String order) throws SQLException {
         List<Product> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng statement
         String query = " ";
+        String queryOrder = "\n order by id \n";
         if (categoryIds != null) {
             StringJoiner sj = new StringJoiner(",");
             for (String categoryId : categoryIds) {
@@ -215,8 +209,24 @@ public class ProductFacade {
             query = query + " AND price <= " + maxPrice;
         }
 
-        System.out.println(query);
-        PreparedStatement stm = con.prepareStatement("select * from product where 1=1" + query + "\n order by id\n"
+        if (order.equals("htl")) {
+            queryOrder = "\n order by price desc\n";
+        }
+
+        if (order.equals("ltm")) {
+            queryOrder = "\n order by price\n";
+        }
+
+        if (order.equals("naz")) {
+            queryOrder = "\n order by name\n";
+        }
+
+        if (order.equals("nza")) {
+            queryOrder = "\n order by name desc\n";
+        }
+
+        System.out.println(query + queryOrder);
+        PreparedStatement stm = con.prepareStatement("select * from product where 1=1" + query + queryOrder
                 + "offset ?  rows fetch next 6 rows only;");
         stm.setInt(1, (index - 1) * 6);
         ResultSet rs = stm.executeQuery();
@@ -236,8 +246,37 @@ public class ProductFacade {
         con.close();
         return list;
     }
-    
-    
+
+    public List<Product> pagingProduct(int index, String name) throws SQLException {
+        List<Product> list = null;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng statement
+        String query = "";
+        if (name != null || !name.isEmpty()) {
+            query = " AND name like '%" + name + "%'";
+        }
+        PreparedStatement stm = con.prepareStatement("select * from product where 1=1" + query + "\n order by id \n"
+                + "offset ?  rows fetch next 6 rows only;");
+        stm.setInt(1, (index - 1) * 6);
+        ResultSet rs = stm.executeQuery();
+        list = new ArrayList<>();
+        while (rs.next()) {
+            //Doc mau tin hien hanh de vao doi tuong 
+            Product pr = new Product();
+            pr.setId(rs.getInt("id"));
+            pr.setName(rs.getString("name"));
+            pr.setDescription(rs.getNString("description"));
+            pr.setImage(rs.getString("image"));
+            pr.setPrice(rs.getFloat("price"));
+            pr.setDiscount(rs.getFloat("discount"));
+            pr.setCategoryID(rs.getString("categoryId"));
+            list.add(pr);
+        }
+        con.close();
+        return list;
+    }
+
     public Product read(String id) throws SQLException {
         Product pr = null;
         //Tạo connection để kết nối vào DBMS
@@ -261,18 +300,7 @@ public class ProductFacade {
         return pr;
     }
 
-    public void update(OrderDetail ord) throws SQLException {
-        Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("update orderDetail set orderHeaderId = ?, productId = ?, quantity = ?, price = ?, discount = ?  where id = ?");
-        stm.setInt(1, ord.getOrderHeaderId());
-        stm.setInt(2, ord.getProductId());
-        stm.setInt(3, ord.getQuantity());
-        stm.setFloat(4, ord.getPrice());
-        stm.setFloat(5, ord.getDiscount());
-        stm.setInt(6, ord.getId());
-        int count = stm.executeUpdate();
-        con.close();
-    }
+
 
     public void delete(String id) throws SQLException {
         Connection con = DBContext.getConnection();

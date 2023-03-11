@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -12,15 +13,20 @@ import java.util.Date;
  * @author admin
  */
 public class OrderHeader {
-    private int id;
-    private Date date;
+     private int id;
+    private Timestamp date;
     private String status;
     private int customerId;
 
     public OrderHeader() {
     }
 
-    public OrderHeader(int id, Date date, String status, int customerId) {
+    public OrderHeader(String status, int customerId) {
+        this.status = status;
+        this.customerId = customerId;
+    }
+
+    public OrderHeader(int id, Timestamp date, String status, int customerId) {
         this.id = id;
         this.date = date;
         this.status = status;
@@ -35,11 +41,11 @@ public class OrderHeader {
         this.id = id;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
