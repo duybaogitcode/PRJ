@@ -17,21 +17,26 @@ public class OrderHeader {
     private Timestamp date;
     private String status;
     private int customerId;
+    private float total;
 
     public OrderHeader() {
     }
 
-    public OrderHeader(String status, int customerId) {
+    public OrderHeader(String status, int customerId, float total) {
         this.status = status;
         this.customerId = customerId;
+        this.total = total;
     }
 
-    public OrderHeader(int id, Timestamp date, String status, int customerId) {
+    public OrderHeader(int id, Timestamp date, String status, int customerId, float total) {
         this.id = id;
         this.date = date;
         this.status = status;
         this.customerId = customerId;
+        this.total = total;
     }
+
+   
 
     public int getId() {
         return id;
@@ -64,5 +69,15 @@ public class OrderHeader {
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
     }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+    
+    
     
 }

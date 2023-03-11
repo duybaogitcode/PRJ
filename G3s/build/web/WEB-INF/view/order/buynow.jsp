@@ -39,5 +39,5 @@
     </tr>
 </table>
 <br>
-<a href="<c:url value ="/order/pay.do?op=buynow" />">Order</a>
+<a href="<c:url value ="/order/pay.do?op=buynow$total=${total}" />">Order</a>
 <a href="<c:url value ="/watch/filter.do" />">Continue Shopping</a>

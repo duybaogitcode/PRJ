@@ -38,6 +38,7 @@ public class OrderHeaderFacade {
             orh.setDate(rs.getTimestamp("date"));
             orh.setStatus(rs.getString("status"));
             orh.setCustomerId(rs.getInt("customerId"));
+            orh.setTotal(rs.getFloat("total"));
             //Them cate vao list
             list.add(orh);
         }
@@ -47,12 +48,13 @@ public class OrderHeaderFacade {
 
     public void create(OrderHeader orh) throws SQLException {
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("insert OrderHeader values(?,?,?)");
+        PreparedStatement stm = con.prepareStatement("insert OrderHeader values(?,?,?,?)");
         Calendar cal = Calendar.getInstance();
         Timestamp timestamp = new java.sql.Timestamp(cal.getTimeInMillis());
         stm.setTimestamp(1, timestamp);
         stm.setString(2, orh.getStatus());
         stm.setInt(3, orh.getCustomerId());
+        stm.setFloat(4, orh.getTotal());
         int count = stm.executeUpdate();
         con.close();
     }
@@ -72,6 +74,7 @@ public class OrderHeaderFacade {
             orh.setDate(rs.getTimestamp("date"));
             orh.setStatus(rs.getString("status"));
             orh.setCustomerId(rs.getInt("customerId"));
+            orh.setTotal(rs.getFloat("total"));
         }
         con.close();
         return orh;

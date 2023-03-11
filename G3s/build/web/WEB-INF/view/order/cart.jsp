@@ -18,7 +18,7 @@
 </style>
 
 <div class="order-content">
-    <table cellspacing="50" style="width: 45%; margin: 50 auto;">
+    <table cellspacing="50" style="width: 45%; margin: 50px auto;">
         <tr>
             <th class="text-center">Product</th>
             <th class="text-center">Quantity</th>
@@ -57,7 +57,7 @@
 <div class="order-contetnt-footer">
     <a class="btn-order-conti" href="<c:url value ="/watch/filter.do" />">Continue Shopping</a>
     <c:if test="${total>0}">
-        <a class="btn-order-order" href="<c:url value ="/order/pay.do" />">Order</a>
+        <a class="btn-order-order" href="<c:url value ="/order/pay.do?total=${total}" />">Order</a>
         <a class="btn-order-empty" href="<c:url value ="/order/cart.do?op=empty" />">Empty cart</a>
     </c:if>
 </div>

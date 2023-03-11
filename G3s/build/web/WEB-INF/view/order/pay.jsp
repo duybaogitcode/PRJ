@@ -25,7 +25,7 @@
                 <c:set var="total" value="${total + item.cost}"></c:set>
                     <tr>
                         <td>
-                            <img src="<c:url value="/img/${item.product.image}" />" width="">
+                            <img src="<c:url value="/img/${item.product.image}" />" style="height: 100px; width: 150px;">
                         ${item.product.name}
                     </td>
                     <td>${item.quantity}</td>

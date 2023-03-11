@@ -200,9 +200,14 @@ public class OrderController extends HttpServlet {
     protected void pay(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         String op = request.getParameter("op");
+        System.out.println(op);
         OrderDetailFacade odf = new OrderDetailFacade();
         OrderHeaderFacade ohf = new OrderHeaderFacade();
-
+        String totals = request.getParameter("total");
+        float total = 0;
+        if(totals!=null || !totals.isEmpty()){
+            total = Float.parseFloat(totals);
+        }
         //Lay cart tu session
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
@@ -216,7 +221,8 @@ public class OrderController extends HttpServlet {
 
         //Tao don hang
         Account acc = (Account) session.getAttribute("account");
-        OrderHeader oh = new OrderHeader("On-going", acc.getId());
+        OrderHeader oh = new OrderHeader("On-going", acc.getId(), total);
+        System.out.println(total);
         //Luu thong tin don hang
         ohf.create(oh);
         List ohl = ohf.select();
