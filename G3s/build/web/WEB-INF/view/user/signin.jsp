@@ -28,7 +28,7 @@
         <!-- </div> -->
         <div class="form_footer">
             <input type="submit" value="Sign in" />
-            <div class="signup_link">New member? <a href="<c:url value ="/user/signup.do" />">Sign up</a> here</div>
+            <div class="signup_link">Already on G3S ? <a href="<c:url value ="/user/signin.do" />">Sign in</a></div>
         </div>
     </form>
 </div>

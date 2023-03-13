@@ -48,7 +48,7 @@ public class AccountFacade {
         con.close();
         return list;
     }
-    
+
     public List<Account> select_1() throws SQLException {
         List<Account> list = null;
         //Tạo connection để kết nối vào DBMS
@@ -113,7 +113,7 @@ public class AccountFacade {
         con.close();
         return acc;
     }
-    
+
     public Account read_1(String s) throws SQLException {
         Account acc = null;
         //Tạo connection để kết nối vào DBMS
@@ -165,7 +165,7 @@ public class AccountFacade {
     public Account signin(String emailOrPhone, String password) throws SQLException, NoSuchAlgorithmException {
         Account acc = null;
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("select * from account where (email = ? or phone = ?) and password = ?");
+        PreparedStatement stm = con.prepareStatement("select * from account where email = ? or phone = ? and password = ?");
         stm.setString(1, emailOrPhone);
         stm.setString(2, emailOrPhone);
         stm.setString(3, password);
@@ -183,7 +183,7 @@ public class AccountFacade {
         con.close();
         return acc;
     }
-    
+
     public List<Account> searchFullType(String searchInput) throws SQLException {
 
         List<Account> list = null;
@@ -224,7 +224,7 @@ public class AccountFacade {
         con.close();
         return list;
     }
-    
+
     public List<Account> pagingRead(int indexPage) throws SQLException {
         List<Account> list = null;
         //Tạo connection để kết nối vào DBMS

@@ -47,7 +47,6 @@ public class UserController extends HttpServlet {
             case "signin":
                 //Processing code here
                 //Foward request & respone to view
-
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
             case "signin_handler":
@@ -94,7 +93,7 @@ public class UserController extends HttpServlet {
                 session.setAttribute("role", acc.getRole());
                 if (acc.getRole().equals("ROLE_ADMIN")) {
                     //forward to admin page
-                    response.sendRedirect(request.getContextPath() + "/admin_account/index.do");
+                    response.sendRedirect(request.getContextPath() + "/admin_dashboard/index.do");
                 } else {
                     //Quay ve Home Page
                     response.sendRedirect(request.getContextPath() + "/home/index.do");

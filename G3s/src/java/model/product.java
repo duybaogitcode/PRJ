@@ -90,10 +90,4 @@ public class Product {
         this.categoryID = categoryID;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", image=" + image + ", description=" + description + ", price=" + price + ", discount=" + discount + ", categoryID=" + categoryID + '}';
-    }
-
-    
 }

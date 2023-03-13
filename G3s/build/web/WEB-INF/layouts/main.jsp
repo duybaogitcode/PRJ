@@ -75,7 +75,7 @@
                 <div class="icons">
                     <i style="font-size: 30px;"><ion-icon name="search"></ion-icon></i>
                     <input type="text" id="searchInput" />
-                    <a href="<c:url value="/order/cart.do"/>"<i style="font-size: 30px;"><ion-icon name="cart"></ion-icon></i></a>(${sessionScope.totalQuantity})
+                    <a href="<c:url value="/order/cart.do"/>"<i style="font-size: 30px;"><ion-icon name="cart"></ion-icon></i></a>(${sessionScope.cart.totalQuantity})
 
 
                 </div>
@@ -84,7 +84,7 @@
 
 
             <script>
-                var searchInput = document.getElementById("searchInput");
+               var searchInput = document.getElementById("searchInput");
                 var searchResults = document.getElementById("searchResults");
 
 
@@ -96,7 +96,7 @@
                             table.innerHTML = xhr.responseText;
                         }
                     };
-                    xhr.open("GET", "/g3s/search?keyword=" + searchInput.value);
+                    xhr.open("GET", "/g3s/watch/searchajax.do?keyword=" + searchInput.value);
                     xhr.send();
                 });
 

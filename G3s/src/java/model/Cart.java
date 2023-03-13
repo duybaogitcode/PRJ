@@ -14,7 +14,8 @@ import java.util.Map;
  * @author duyba
  */
 public class Cart {
-     private Map<Integer, Item> map = null;
+
+    private Map<Integer, Item> map = null;
 
     public Cart() {
         map = new HashMap<>();
@@ -38,16 +39,23 @@ public class Cart {
             if (oldItem.getQuantity() > 1) {
                 oldItem.setQuantity(oldItem.getQuantity() - item.getQuantity());
             }
+            else{
+                map.remove(id);
+            }
         }
     }
-    
+
+//    public int getTotalQuantity() {
+//        return map.size();
+//    }
+
     public int getTotalQuantity() {
-    int total = 0;
-    for (Item item : map.values()) {
-        total += item.getQuantity();
+        int total = 0;
+        for (Item item : map.values()) {
+            total += item.getQuantity();
+        }
+        return total;
     }
-    return total;
-}
 
     public void update(int id, int quantity) {
         Item item = map.get(id);
@@ -69,5 +77,5 @@ public class Cart {
     public Collection<Item> getItems() {
         return map.values();
     }
-    
+
 }

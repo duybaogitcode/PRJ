@@ -55,8 +55,8 @@ and open the template in the editor.
 }
 
 .icons{
-display: flex;
-align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .icons i{
@@ -181,16 +181,15 @@ align-items: center;
     margin-right: auto;
     width: 100%;
 }
-
-/*.show-product table .show-product-box{
+/*
+.show-product table .show-product-box{
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
     border: .1rem solid rgba(0,0,0,.3);
-}
-*/
+}*/
+
 
 .show-product table .show-product-box:hover{
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
-    /*    border: .1rem solid rgba(0,0,0,.3);*/
     background-color: whitesmoke;
 }
 
@@ -227,6 +226,46 @@ align-items: center;
     font-weight: 700;
 }
 
+.show-product-box .show-product-box-btn-buy{
+    border: 1px solid #0FA9EB;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.show-product-box .show-product-box-btn-buy:hover{
+    background-color: #0FA9EB;
+    color: white;
+}
+
+
+.show-product-box .show-product-box-btn-add{
+    border: 1px solid #0FA9EB;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.show-product-box .show-product-box-btn-add:hover{
+    background-color: #0FA9EB;
+    color: white;
+}
+
+.index{
+    margin-top: 20px;
+    float: right;
+    margin-right: 30px;
+}
+
+.index .page-index{
+    padding: 10px;
+    border: 1px solid black;
+    background-color: whitesmoke;
+    text-decoration: none;
+    color: black;
+}
+
+.index .page-index:hover{
+    background-color: #0FA9EB;
+}
 
 
 /*filter*/
@@ -315,6 +354,68 @@ input[type = "range"]::-moz-range-thumb{
     font-size: 20px;
 }
 
+.sort{
+    display: flex;
+}
+
+.sort select{
+    margin-left: 20px;
+    border-radius: 5px;
+    outline: none; 
+}
+
+.sort select:focus{
+    border-color: #0FA9EB;
+}
+
+
+
+/*cart*/
+
+.order-content .btn-order{
+    border: 1px solid black;
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+
+.order-content .btn-order:hover{
+    border: 1px solid black;
+    background-color: #0FA9EB;
+}
+
+.order-contetnt-footer{
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+}
+
+.order-contetnt-footer a{
+    text-decoration: none;
+    color: white;
+    border-radius: 10px;
+    font-weight: 700;
+     transition: 0.5s ease;
+}
+
+.order-contetnt-footer .btn-order-order{
+    padding: 10px 60px;
+    background-color: #0FA9EB;
+}
+
+.order-contetnt-footer .btn-order-conti{
+    padding: 10px;
+    background-color: #0FA9EB;
+}
+
+.order-contetnt-footer .btn-order-empty{
+    padding: 10px 40px;
+    background-color: #0FA9EB;
+}
+
+.order-contetnt-footer a:hover{
+    font-size: 20px;
+    color: white;
+}
 
 /*----------end watches----------*/
 

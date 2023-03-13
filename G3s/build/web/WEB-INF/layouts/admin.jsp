@@ -29,9 +29,9 @@
         <link rel="stylesheet" href="<c:url value="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />">
 
     </head>   
-        <c:if test="${sessionScope.account==null}">
-            <jsp:forward page="/user/signin.do" />
-        </c:if>
+    <c:if test="${sessionScope.account==null}">
+        <jsp:forward page="/user/signin.do" />
+    </c:if>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
@@ -54,13 +54,21 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
+                            <a class="nav-link" href="<c:url value="/admin_dashboard/index.do" />">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-gauge"></i> </div>
+                                Dashboard
+                            </a>
                             <a class="nav-link" href="<c:url value="/admin_account/index.do" />">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i>  </div>
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i> </div>
                                 Accounts
                             </a>
                             <a class="nav-link" href="<c:url value="/admin_product/index.do" />">
-                                <div class="sb-nav-link-icon"><i class="fa-solid fa-file-invoice"></i>  </div>
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-store"></i> </div>
                                 Products
+                            </a>
+                            <a class="nav-link" href="<c:url value="/admin_order/index.do" />">
+                                <div class="sb-nav-link-icon"><i class="fa-solid fa-cash-register"></i> </div>
+                                Orders
                             </a>
                         </div>
                     </div>
@@ -71,13 +79,13 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                
+
                 <jsp:include page = "/WEB-INF/view/${controller}/${action}.jsp" />
 
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                            <div class="text-muted">Copyright &copy; G3s</div>
                             <div>
                                 <a href="#">Privacy Policy</a>
                                 &middot;

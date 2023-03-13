@@ -425,7 +425,7 @@ public class AdminProductController extends HttpServlet {
                     //Cap nhat toy vao database
                     pf.update_1(productUp);
 
-                    //Hien danh sach toy
+                    //Hien danh sach product
                     response.sendRedirect(request.getContextPath() + "/admin_product/index.do");
                 } catch (SQLException ex) {
                     request.setAttribute("message", "Can not save this product. Please check the product data.");

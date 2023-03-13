@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.Customer;
 import model.OrderDetail;
 
 /**
@@ -20,7 +19,8 @@ import model.OrderDetail;
  * @author admin
  */
 public class OrderDetailFacade {
-   public List<OrderDetail> select() throws SQLException {
+
+    public List<OrderDetail> select() throws SQLException {
         List<OrderDetail> list = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
@@ -32,9 +32,8 @@ public class OrderDetailFacade {
         while (rs.next()) {
             //Doc mau tin hien hanh de vao doi tuong 
             OrderDetail ord = new OrderDetail();
-            ord.setId(rs.getInt("id"));
             ord.setOrderHeaderId(rs.getInt("orderHeaderId"));
-            ord.setProductId(rs.getInt("productId"));         
+            ord.setProductId(rs.getInt("productId"));
             ord.setQuantity(rs.getInt("quantity"));
             ord.setPrice(rs.getFloat("price"));
             ord.setDiscount(rs.getFloat("discount"));
@@ -44,17 +43,16 @@ public class OrderDetailFacade {
         con.close();
         return list;
     }
-    
+
     public void create(OrderDetail ord) throws SQLException {
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("insert OrderDetail values(?,?,?,?,?,?)");
-        stm.setInt(1, ord.getId());
-        stm.setInt(2, ord.getOrderHeaderId());
-        stm.setInt(3, ord.getProductId());
-        stm.setInt(4, ord.getQuantity());
-        stm.setFloat(5, ord.getPrice());
-        stm.setFloat(6, ord.getDiscount());
-        int count = stm.executeUpdate();
+        PreparedStatement stm = con.prepareStatement("insert OrderDetail values(?,?,?,?,?)");
+        stm.setInt(1, ord.getOrderHeaderId());
+        stm.setInt(2, ord.getProductId());
+        stm.setInt(3, ord.getQuantity());
+        stm.setFloat(4, ord.getPrice());
+        stm.setFloat(5, ord.getDiscount());
+        stm.executeUpdate();
         con.close();
     }
 
@@ -63,13 +61,12 @@ public class OrderDetailFacade {
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng PreparedStatement
-        PreparedStatement stm = con.prepareStatement("select * from Product where id = ?");
+        PreparedStatement stm = con.prepareStatement("select * from Product where orderHeaderId = ?");
         //Thực thi lệnh SELECT
         stm.setString(1, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
             ord = new OrderDetail();
-            ord.setId(rs.getInt("id"));
             ord.setOrderHeaderId(rs.getInt("orderHeaderId"));
             ord.setProductId(rs.getInt("productId"));
             ord.setQuantity(rs.getInt("quantity"));
@@ -82,13 +79,12 @@ public class OrderDetailFacade {
 
     public void update(OrderDetail ord) throws SQLException {
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("update OrderDetail set orderHeaderId = ?, productId = ?, quantity = ?, price = ?, discount = ?  where id = ?");
-        stm.setInt(1, ord.getOrderHeaderId());
-        stm.setInt(2, ord.getProductId());
-        stm.setInt(3, ord.getQuantity());
-        stm.setFloat(4, ord.getPrice());
-        stm.setFloat(5, ord.getDiscount());
-        stm.setInt(6, ord.getId());
+        PreparedStatement stm = con.prepareStatement("update OrderDetail set productId = ?, quantity = ?, price = ?, discount = ?  where orderHeaderId = ?");
+        stm.setInt(1, ord.getProductId());
+        stm.setInt(2, ord.getQuantity());
+        stm.setFloat(3, ord.getPrice());
+        stm.setFloat(4, ord.getDiscount());
+        stm.setInt(5, ord.getOrderHeaderId());
         int count = stm.executeUpdate();
         con.close();
     }
@@ -96,9 +92,42 @@ public class OrderDetailFacade {
     public void delete(String id) throws SQLException {
         Connection con = DBContext.getConnection();
         // Prepare -> thay đổi dữ liệu
-        PreparedStatement stm = con.prepareStatement("delete from OrderHeader where id = ?");
+        PreparedStatement stm = con.prepareStatement("delete from OrderHeader where orderHeaderId = ?");
         stm.setString(1, id);
         int count = stm.executeUpdate();
         con.close();
-    } 
-  }
+    }
+
+    public int getPercentageCategoryPerYear(String cateId, int year) throws SQLException {
+        int res = 0;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select sum(quantity) as sumCategory from product join orderdetail on product.id = orderdetail.productid join orderheader on orderdetail.orderheaderid = orderheader.id where categoryid = ? and year(date) = ? group by categoryId");
+        //Thực thi lệnh SELECT
+        stm.setString(1, cateId);
+        stm.setInt(2, year);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            res = rs.getInt("sumCategory");
+        }
+        con.close();
+        return res;
+    }
+    
+    public int getPercentageCategoryOverall(String cateId) throws SQLException {
+        int res = 0;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select sum(quantity) as sumCategory from product join orderdetail on product.id = orderdetail.productid join orderheader on orderdetail.orderheaderid = orderheader.id where categoryid = ? group by categoryId");
+        //Thực thi lệnh SELECT
+        stm.setString(1, cateId);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            res = rs.getInt("sumCategory");
+        }
+        con.close();
+        return res;
+    }
+}
