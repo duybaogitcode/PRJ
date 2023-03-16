@@ -129,7 +129,8 @@ public class OrderController extends HttpServlet {
             }
         } else {
             //op = null khi request lan dau
-            String id = request.getParameter("id");
+            String idS = request.getParameter("id");
+            int id = Integer.parseInt(idS);
             ProductFacade pf = new ProductFacade();
             Product product = pf.read(id);
             item = new Item(product, 1);
@@ -141,7 +142,8 @@ public class OrderController extends HttpServlet {
 
     protected void add2cart(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        String id = request.getParameter("id");
+        String idS = request.getParameter("id");
+        int id = Integer.parseInt(idS);
         ProductFacade pf = new ProductFacade();
         Product product = pf.read(id);
         Item item = new Item(product, 1);
@@ -156,18 +158,15 @@ public class OrderController extends HttpServlet {
         }
         cart.add(item);
         String urlParam = (String) session.getAttribute("urlParam");
-        
+
         response.sendRedirect(request.getContextPath() + urlParam + "#" + id);
     }
 
     protected void cart(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         String op = request.getParameter("op");
-        String id = request.getParameter("id");
+        System.out.println(op);
         HttpSession session = request.getSession();
-        ProductFacade pf = new ProductFacade();
-        Product product = pf.read(id);
-        Item item = new Item(product, 1);
 
         //Lay cart tu session
         Cart cart = (Cart) session.getAttribute("cart");
@@ -178,6 +177,16 @@ public class OrderController extends HttpServlet {
         }
 
         if (op != null) {
+            String idS = request.getParameter("id");
+            System.out.println("test ids" + idS);
+            int id = 0;
+            if (idS != null && !idS.isEmpty()) {
+                id = Integer.parseInt(idS);
+            }
+            ProductFacade pf = new ProductFacade();
+            Product product = pf.read(id);
+            System.out.println(product);
+            Item item = new Item(product, 1);
             switch (op) {
                 case "minus":
                     cart.minus(item);
@@ -186,7 +195,7 @@ public class OrderController extends HttpServlet {
                     cart.add(item);
                     break;
                 case "remove":
-                    cart.remove(Integer.parseInt(id));
+                    cart.remove(id);
                     break;
                 case "empty":
                     cart.empty();
@@ -205,7 +214,7 @@ public class OrderController extends HttpServlet {
         OrderHeaderFacade ohf = new OrderHeaderFacade();
         String totals = request.getParameter("total");
         float total = 0;
-        if(totals!=null || !totals.isEmpty()){
+        if (totals != null && !totals.isEmpty()) {
             total = Float.parseFloat(totals);
         }
         //Lay cart tu session

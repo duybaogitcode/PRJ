@@ -180,6 +180,7 @@ and open the template in the editor.
     margin-left: auto;
     margin-right: auto;
     width: 100%;
+    table-layout: fixed;
 }
 /*
 .show-product table .show-product-box{
@@ -417,6 +418,9 @@ input[type = "range"]::-moz-range-thumb{
     color: white;
 }
 
+/*buynow*/
+
+
 /*----------end watches----------*/
 
 
@@ -542,6 +546,7 @@ input[type='submit']:hover {
 .mt-5 {
     margin-top: 5% !important;
 }
+
 /*----------End----------*/
 
 

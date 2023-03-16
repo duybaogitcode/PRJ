@@ -80,12 +80,12 @@ public class OrderHeaderFacade {
         return orh;
     }
 
-    public void update(OrderHeader orh) throws SQLException {
+
+public void update(int id, String status) throws SQLException {
         Connection con = DBContext.getConnection();
-        PreparedStatement stm = con.prepareStatement("update OrderHeader set status = ?, customerId = ? where id = ?");
-        stm.setString(1, orh.getStatus());
-        stm.setInt(2, orh.getCustomerId());
-        stm.setInt(3, orh.getId());
+        PreparedStatement stm = con.prepareStatement("update OrderHeader set status = ? where id = ?");
+        stm.setString(1, status);
+        stm.setInt(2, id);
         int count = stm.executeUpdate();
         con.close();
     }
@@ -97,5 +97,22 @@ public class OrderHeaderFacade {
         stm.setString(1, id);
         stm.executeUpdate();
         con.close();
+    }
+    
+    public double getTotalPerMoth(int month, int year) throws SQLException {
+        double res = 0;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select sum(total) as sumTotal from orderheader where month(date) = ? and year(date) = ?");
+        //Thực thi lệnh SELECT
+        stm.setInt(1, month);
+        stm.setInt(2, year);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            res = rs.getInt("sumTotal");
+        }
+        con.close();
+        return res;
     }
 }

@@ -51,7 +51,7 @@ public class WatchesController extends HttpServlet {
                 filter(request, response);
                 break;
             case "search":
-                session.setAttribute("urlParam", "/watch/filter.do?" + request.getQueryString());
+                session.setAttribute("urlParam", "/watch/search.do?" + request.getQueryString());
                 search(request, response);
                 break;
             case "searchajax":
@@ -135,7 +135,7 @@ public class WatchesController extends HttpServlet {
             ProductFacade pf = new ProductFacade();
             int numPage = pf.getTotalProduct(categoryIds, minPrice, maxPrice);
             int endPage = numPage / 6;
-            System.out.println(endPage);
+
             if (numPage % 6 != 0) {
                 endPage++;
             }
@@ -175,7 +175,6 @@ public class WatchesController extends HttpServlet {
             listSearchPaging = pf.pagingProduct(index, keyword);
             request.setAttribute("listSearchPaging", listSearchPaging);
             request.setAttribute("endPage", endPage);
-            request.setAttribute("index", index);
             request.setAttribute("keyword", keyword);
             request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         } catch (SQLException ex) {
@@ -251,10 +250,10 @@ public class WatchesController extends HttpServlet {
         for (int i = 1; i <= endPage; i++) {
             sb.append("<a class=\"page-index\" href=\"")
                     .append(request.getContextPath())
-                    .append("/watch/search.do?keyword=")
-                    .append(keyword)
-                    .append("&index=")
+                    .append("/watch/search.do?index=")
                     .append(i)
+                    .append("&keyword=")
+                    .append(keyword)
                     .append("\">")
                     .append(i)
                     .append("</a>");
@@ -263,6 +262,8 @@ public class WatchesController extends HttpServlet {
         sb.append("</div>");
         response.setContentType("text/html");
         response.getWriter().write(sb.toString());
+        HttpSession session = request.getSession();
+        session.setAttribute("urlParam", "/watch/search.do?index=1&keyword=" + keyword);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

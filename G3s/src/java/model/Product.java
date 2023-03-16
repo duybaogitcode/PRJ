@@ -90,4 +90,10 @@ public class Product {
         this.categoryID = categoryID;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    
 }

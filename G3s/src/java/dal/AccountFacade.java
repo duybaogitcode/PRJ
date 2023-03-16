@@ -40,6 +40,7 @@ public class AccountFacade {
             acc.setAddress(rs.getString("address"));
             acc.setPhone(rs.getString("phone"));
             acc.setEmail(rs.getString("email"));
+            acc.setEnable(rs.getBoolean("enabled"));
             acc.setPassword(rs.getString("password"));
             acc.setRole(rs.getString("role"));
             //Them cate vao list
@@ -63,14 +64,14 @@ public class AccountFacade {
         con.close();
     }
 
-    public Account read(String id) throws SQLException {
+    public Account read(String s) throws SQLException {
         Account acc = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng PreparedStatement
-        PreparedStatement stm = con.prepareStatement("select * from Account where id = ?");
+        PreparedStatement stm = con.prepareStatement("select * from Account where email = ?");
         //Thực thi lệnh SELECT
-        stm.setString(1, id);
+        stm.setString(1, s);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
             acc = new Account();
@@ -80,6 +81,7 @@ public class AccountFacade {
             acc.setPhone(rs.getString("phone"));
             acc.setEmail(rs.getString("email"));
             acc.setPassword(rs.getString("password"));
+            acc.setEnable(rs.getBoolean("enabled"));
             acc.setRole(rs.getString("role"));
         }
         con.close();
@@ -106,6 +108,76 @@ public class AccountFacade {
         stm.setString(1, id);
         int count = stm.executeUpdate();
         con.close();
+    }
+
+    public List<Account> searchFullType(String searchInput, int index) throws SQLException {
+
+        List<Account> list = null;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select * from account where id like ? or name like ? or address like ? or phone like ? or email like ? or password like ? or enabled like ? or role like ? order by id offset ? rows fetch next 10 rows only");
+        list = new ArrayList<>();
+        //Thực thi lệnsh SELECT
+        stm.setString(1, "%" + searchInput + "%");
+        stm.setString(2, "%" + searchInput + "%");
+        stm.setString(3, "%" + searchInput + "%");
+        stm.setString(4, "%" + searchInput + "%");
+        stm.setString(5, "%" + searchInput + "%");
+        stm.setString(6, "%" + searchInput + "%");
+        if (searchInput.contains("ena")) {
+            stm.setString(7, "%" + 1 + "%");
+        } else if (searchInput.contains("dis")) {
+            stm.setString(7, "%" + 0 + "%");
+        } else {
+            stm.setString(7, "%" + searchInput + "%");
+        }
+        stm.setString(8, "%" + searchInput + "%");
+        int offset = (index - 1) * 10;
+        stm.setInt(9, offset);
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            Account acc = new Account();
+            acc.setId(rs.getInt("id"));
+            acc.setName(rs.getString("name"));
+            acc.setAddress(rs.getString("address"));
+            acc.setPhone(rs.getString("phone"));
+            acc.setEmail(rs.getString("email"));
+            acc.setPassword(rs.getString("password"));
+            acc.setEnable(rs.getBoolean("enabled"));
+            acc.setRole(rs.getString("role"));
+            list.add(acc);
+        }
+        con.close();
+        return list;
+    }
+
+    public List<Account> pagingRead(int indexPage) throws SQLException {
+        List<Account> list = null;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select * from account order by id offset ? rows fetch next 10 rows only");
+        list = new ArrayList<>();
+        //Thực thi lệnsh SELECT
+        stm.setInt(1, (indexPage - 1) * 10);
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            Account acc = new Account();
+            acc.setId(rs.getInt("id"));
+            acc.setName(rs.getString("name"));
+            acc.setAddress(rs.getString("address"));
+            acc.setPhone(rs.getString("phone"));
+            acc.setEmail(rs.getString("email"));
+            acc.setPassword(rs.getString("password"));
+            acc.setEnable(rs.getBoolean("enabled"));
+            acc.setRole(rs.getString("role"));
+            list.add(acc);
+        }
+        con.close();
+        return list;
     }
 
     public Account signin(String emailOrPhone, String password) throws SQLException, NoSuchAlgorithmException {

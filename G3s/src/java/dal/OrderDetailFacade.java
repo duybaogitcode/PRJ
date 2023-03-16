@@ -97,4 +97,37 @@ public class OrderDetailFacade {
         int count = stm.executeUpdate();
         con.close();
     }
+    
+    public int getPercentageCategoryPerYear(String cateId, int year) throws SQLException {
+        int res = 0;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select sum(quantity) as sumCategory from product join orderdetail on product.id = orderdetail.productid join orderheader on orderdetail.orderheaderid = orderheader.id where categoryid = ? and year(date) = ? group by categoryId");
+        //Thực thi lệnh SELECT
+        stm.setString(1, cateId);
+        stm.setInt(2, year);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            res = rs.getInt("sumCategory");
+        }
+        con.close();
+        return res;
+    }
+    
+    public int getPercentageCategoryOverall(String cateId) throws SQLException {
+        int res = 0;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select sum(quantity) as sumCategory from product join orderdetail on product.id = orderdetail.productid join orderheader on orderdetail.orderheaderid = orderheader.id where categoryid = ? group by categoryId");
+        //Thực thi lệnh SELECT
+        stm.setString(1, cateId);
+        ResultSet rs = stm.executeQuery();
+        if (rs.next()) {
+            res = rs.getInt("sumCategory");
+        }
+        con.close();
+        return res;
+    }
 }

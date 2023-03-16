@@ -45,7 +45,7 @@
                         <option value="htl" ${sort == "htl" ? "selected":""}>Price High to low</option>
                         <option value="lth" ${sort == "lth" ? "selected":""}>Price Low to high</option>
                         <option value="naz" ${sort == "naz" ? "selected":""}>Name A-Z</option>
-                        <option value="nza" ${sort == "naz" ? "selected":""}>Name Z-A</option>
+                        <option value="nza" ${sort == "nza" ? "selected":""}>Name Z-A</option>
                     </select>
                 </div>
             </div>

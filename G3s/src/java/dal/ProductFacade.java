@@ -46,6 +46,22 @@ public class ProductFacade {
         con.close();
         return list;
     }
+    
+     public void create(Product product) throws SQLException {
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+        //Tạo đối tượng statement
+        PreparedStatement stm = con.prepareStatement("insert into product values(?, ?, ?, ?, ?, ?)");
+        //Thực thi lệnh sql
+        stm.setString(1, product.getName());
+        stm.setString(2, product.getDescription());
+        stm.setString(3, product.getImage());
+        stm.setFloat(4, product.getPrice());
+        stm.setFloat(5, product.getDiscount());
+        stm.setString(6, product.getCategoryID());
+        int rs = stm.executeUpdate();
+        con.close();
+    }
 
     public int getTotalProduct() throws SQLException {
         Connection con = DBContext.getConnection();
@@ -164,7 +180,6 @@ public class ProductFacade {
         if (maxPrice != null && !maxPrice.isEmpty()) {
             query = query + " AND price <= " + maxPrice;
         }
-        
 
         System.out.println(query);
         ResultSet rs = stm.executeQuery(query);
@@ -213,7 +228,7 @@ public class ProductFacade {
             queryOrder = "\n order by price desc\n";
         }
 
-        if (order.equals("ltm")) {
+        if (order.equals("lth")) {
             queryOrder = "\n order by price\n";
         }
 
@@ -277,14 +292,14 @@ public class ProductFacade {
         return list;
     }
 
-    public Product read(String id) throws SQLException {
+    public Product read(int id) throws SQLException {
         Product pr = null;
         //Tạo connection để kết nối vào DBMS
         Connection con = DBContext.getConnection();
         //Tạo đối tượng PreparedStatement
         PreparedStatement stm = con.prepareStatement("select * from Product where id = ?");
         //Thực thi lệnh SELECT
-        stm.setString(1, id);
+        stm.setInt(1, id);
         ResultSet rs = stm.executeQuery();
         if (rs.next()) {
             pr = new Product();
@@ -300,13 +315,108 @@ public class ProductFacade {
         return pr;
     }
 
-
-
-    public void delete(String id) throws SQLException {
+    public void delete(int id) throws SQLException {
         Connection con = DBContext.getConnection();
         // Prepare -> thay đổi dữ liệu
         PreparedStatement stm = con.prepareStatement("delete from orderHeader where id = ?");
-        stm.setString(1, id);
+        stm.setInt(1, id);
+        int count = stm.executeUpdate();
+        con.close();
+    }
+
+    public List<Product> pagingAdmin(int indexPage) throws SQLException {
+        List<Product> list = null;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select * from product order by id offset ? rows fetch next 10 rows only");
+        list = new ArrayList<>();
+        //Thực thi lệnsh SELECT
+        stm.setInt(1, (indexPage - 1) * 10);
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            Product pr = new Product();
+            pr.setId(rs.getInt("id"));
+            pr.setName(rs.getString("name"));
+            pr.setDescription(rs.getNString("description"));
+            pr.setImage(rs.getString("image"));
+            pr.setPrice(rs.getFloat("price"));
+            pr.setDiscount(rs.getFloat("discount"));
+            pr.setCategoryID(rs.getString("categoryId"));
+            list.add(pr);
+        }
+        con.close();
+        return list;
+    }
+    
+    public List<Product> searchFullType(String searchInput, int index) throws SQLException {
+
+        List<Product> list = null;
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select * from product where id like ? or name like ? or description like ? or image like ? or price like ? or discount like ? or categoryId like ? order by id offset ? rows fetch next 10 rows only");
+        list = new ArrayList<>();
+        //Thực thi lệnsh SELECT
+        stm.setString(1, "%" + searchInput + "%");
+        stm.setString(2, "%" + searchInput + "%");
+        stm.setString(3, "%" + searchInput + "%");
+        stm.setString(4, "%" + searchInput + "%");
+        stm.setString(5, "%" + searchInput + "%");
+        stm.setString(6, "%" + searchInput + "%");
+        stm.setString(7, "%" + searchInput + "%");
+        stm.setInt(8, (index-1)*10);
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            Product pr = new Product();
+            pr.setId(rs.getInt("id"));
+            pr.setName(rs.getString("name"));
+            pr.setDescription(rs.getNString("description"));
+            pr.setImage(rs.getString("image"));
+            pr.setPrice(rs.getFloat("price"));
+            pr.setDiscount(rs.getFloat("discount"));
+            pr.setCategoryID(rs.getString("categoryId"));
+            list.add(pr);
+        }
+        con.close();
+        return list;
+    }
+
+    public int totalSearchFullType(String searchInput) throws SQLException {
+
+        //Tạo connection để kết nối vào DBMS
+        Connection con = DBContext.getConnection();
+
+        //Tạo đối tượng PreparedStatement
+        PreparedStatement stm = con.prepareStatement("select count(*) as Num from product where id like ? or name like ? or description like ? or image like ? or price like ? or discount like ? or categoryId like ?");
+        //Thực thi lệnsh SELECT
+        stm.setString(1, "%" + searchInput + "%");
+        stm.setString(2, "%" + searchInput + "%");
+        stm.setString(3, "%" + searchInput + "%");
+        stm.setString(4, "%" + searchInput + "%");
+        stm.setString(5, "%" + searchInput + "%");
+        stm.setString(6, "%" + searchInput + "%");
+        stm.setString(7, "%" + searchInput + "%");
+        ResultSet rs = stm.executeQuery();
+        while (rs.next()) {
+            return rs.getInt("Num");
+        }
+        con.close();
+        return 0;
+    }
+
+    public void update(Product product) throws SQLException {
+        Connection con = DBContext.getConnection();
+        PreparedStatement stm = con.prepareStatement("update Product set name = ?, description = ?, image = ?, price = ?, discount =?, categoryId = ? where id = ?");
+        stm.setString(1, product.getName());
+        stm.setNString(2, product.getDescription());
+        stm.setString(3, product.getImage());
+        stm.setFloat(4, product.getPrice());
+        stm.setFloat(5, product.getDiscount());
+        stm.setString(6, product.getCategoryID());
+        stm.setInt(7, product.getId());
         int count = stm.executeUpdate();
         con.close();
     }

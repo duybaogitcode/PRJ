@@ -8,7 +8,8 @@
 <%@taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<div class="container col-sm-3 mt-5">
+<div style="padding: 90px 0;">
+    <div class="container col-sm-3 mt-5 sigin" style="padding-bottom: 10px;">
     <h1>Sign in</h1>
    <form action="<c:url value="/user/signin_handler.do" />" method="get">
         <div class="form_details">
@@ -31,6 +32,7 @@
             <div class="signup_link">Already on G3S ? <a href="<c:url value ="/user/signin.do" />">Sign in</a></div>
         </div>
     </form>
+</div>
 </div>
 
 <script src="https://kit.fontawesome.com/10fdb3b039.js" crossorigin="anonymous"></script>

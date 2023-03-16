@@ -55,24 +55,22 @@ public class UserController extends HttpServlet {
             case "admin":
                 admin(request, response);
                 break;
-            case "joinnow":
-                //Processing code here
-                //Foward request & respone to view
+            case "signup":
                 request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
                 break;
-            case "joinnow_handler":
-                joinnow_handler(request, response);
-                break;
+            case "signup_handler":
+                signup_handler(request, response);
             case "logout":
                 logout(request, response);
                 break;
             default:
                 //Show error page
                 request.setAttribute("Message", "Invalid");
+                request.getRequestDispatcher("/WEB-INF/layouts/main.jsp").forward(request, response);
         }
     }
 
-    protected void signin_handler(HttpServletRequest request, HttpServletResponse response)
+       protected void signin_handler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             String emailOrPhone = request.getParameter("emailOrPhone");
@@ -93,6 +91,7 @@ public class UserController extends HttpServlet {
                 session.setAttribute("role", acc.getRole());
                 if (acc.getRole().equals("ROLE_ADMIN")) {
                     //forward to admin page
+                    response.sendRedirect(request.getContextPath() + "/admin_dashboard/index.do");
                 } else {
                     //Quay ve Home Page
                     response.sendRedirect(request.getContextPath() + "/home/index.do");
@@ -123,7 +122,7 @@ public class UserController extends HttpServlet {
         }
     }
     
-    protected void joinnow_handler(HttpServletRequest request, HttpServletResponse response)
+    protected void signup_handler(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             //Lay thong tin register
@@ -196,10 +195,10 @@ public class UserController extends HttpServlet {
             //Create new account
             if (doneCheck == 6) {
                 af.create(acc);
-                request.setAttribute("messageDone", "Done");
+                request.setAttribute("messageDone", "Sign up success. Please Sign in.");
             }
 
-            request.getRequestDispatcher("/user/joinnow.do").forward(request, response);
+            request.getRequestDispatcher("/user/signup.do").forward(request, response);
 
         } catch (SQLException ex) {
         }

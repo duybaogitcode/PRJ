@@ -30,7 +30,7 @@
                     <i><ion-icon name="contact"></ion-icon></i>
                             <c:choose>
                                 <c:when test="${sessionScope.account==null}">
-                            <a href="<c:url value ="/user/joinnow.do" />"class="btn-header-left">Join Now</a>
+                            <a href="<c:url value ="/user/signup.do" />"class="btn-header-left">Sign up</a>
                             <span>/</span>
                             <a href="<c:url value ="/user/signin.do" />" class="btn-header-left">Sign in</a> 
                         </c:when>
@@ -74,7 +74,7 @@
 
                 <div class="icons">
                     <i style="font-size: 30px;"><ion-icon name="search"></ion-icon></i>
-                    <input type="text" id="searchInput" />
+                    <input type="text" id="searchInput" value="${keyword}" />
                     <a href="<c:url value="/order/cart.do"/>"<i style="font-size: 30px;"><ion-icon name="cart"></ion-icon></i></a>(${sessionScope.cart.totalQuantity})
 
 
@@ -85,7 +85,6 @@
 
             <script>
                var searchInput = document.getElementById("searchInput");
-                var searchResults = document.getElementById("searchResults");
 
 
                 searchInput.addEventListener("input", function () {
